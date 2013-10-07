@@ -1,0 +1,174 @@
+
+
+<p id="notice"><%= notice %></p>
+
+</head>
+<body >
+  <div class="container hero-unit pull-left" style="margin-left:20px; width:450px" >       
+  	<h5 style="margin-top:-40px">Should I take my dog to Fort Funston right now?</h5>    	
+	  <div data-bind="if: !isComplete()">
+	    <h5>Hmmmm..let me see...</h5> 
+	  </div>
+	  <div data-bind="css: { visible: isComplete() }" >
+	    <div data-bind="if: !isError()">
+	      <div data-bind="if: goFunston() == 1" >
+	         <h3 class="answer yes">Yes</h3>
+	      </div>
+	      <div data-bind="if: goFunston() == -1" >
+	         <h3 class="answer no">No</h3>
+	      </div>    
+	      <div data-bind="if: goFunston() == 0" >
+	         <h3 class="answer maybe">Maybe</h3>
+	      </div>
+	    </div>
+	    <div data-bind="if: isError()">
+	      <h1 class="no">Error occured getting weather data. Try again or go to Fort Funston at your own risk.</h1>
+	    </div>    
+	    <div style="margin-top:25px;font-size:15px">
+	        <dl xmlns="http://www.w3.org/1999/xhtml" class="dl-horizontal myDl"  >              
+		          <dt>Condtions</dt>
+		          <dd data-bind="text: condition(), css: { maybe : conditionCode() == 0, no : conditionCode() > 1 }" /></dd>
+		          <dt>Wind</dt>
+		          <dd data-bind="text: windText(), css: { maybe : windMph() < 25 && windMph() > 15 , no : windMph() > 25  }" /></dd>
+		          <dt>Temp</dt>       
+		          <dd data-bind="text: tempText(), css: { maybe : temp() > 45 && temp() < 60, no : temp() < 45 }" /></dd>                
+		          <dt>Tide</dt>
+		          <dd data-bind="text: tideText(), css: { maybe : tideHours() > 10, no : tideHours() > 18 }" /></dd>
+	        </dl>
+	         <div data-bind="text: obsTime()" style="font-size:small"></div>
+		</div>
+                   
+	    <!-- <div style="margin-top:90px">
+	      <dl>
+	         <dt>Webcam:</dt>
+	         <dd style="margin-left:-5px"><img src="http://www.flyfunston.org/newwebcam/panosmall.jpg"  hspace=5 vspace=5 border="0"></dd>
+	         <dd style="margin-left:0px">webcam provided by <a href="http://www.flyfunston.org">flying feathers hang gliding club</a></dd>
+	      </dl>
+	    </div> -->
+     </div>
+       
+	   <div style="margin-bottom:-20px">
+	        <p>Would you take your dog to Fort Funston under these conditions? <a href="#" rel="tooltip" title="In order to make the best decision,&#13;&#10;this site learns from your suggestions.&#13;&#10;Please contribute!">(why)</a> </p>
+	        <div id="buttonSet">
+	            <button data-bind="click: function() { submitAnswer(1) }" class="btn yes" >Yes</button>  
+	            <button data-bind="click: function() { submitAnswer(0) }" class="btn maybe">Maybe</button>  
+	            <button data-bind="click: function() { submitAnswer(-1) }" class="btn no">No</button>
+	        </div>
+	        <div id="thanks" class="yes" >
+	            Thanks!
+	        </div>
+	        <div id="problem" class="no">
+	            There was a problem submitting the data. Please try again later.
+	        </div>          
+	        <div id="submitResult">
+	        </div>
+	   </div>
+    </div>  
+</body>
+  <script type="text/javascript">
+      $(function () {
+          $('#thanks').hide();
+          $('#problem').hide(); 		  		      
+
+          var viewModel = {
+              self: this,
+              isComplete: ko.observable(false),
+              isError: ko.observable(false),
+              obsTime: ko.observable(''),
+              condition: ko.observable(''),
+              conditionCode: ko.observable(0),
+              temp: ko.observable(0),
+              windChill: ko.observable(0),
+              windMph: ko.observable(0),
+              windGustMph: ko.observable(0),
+              goFunston: ko.observable(5),
+              windText: ko.observable(''),
+              tempText: ko.observable(''),
+              tideHours: ko.observable(0),
+              tideText: ko.observable(''),
+              serverResult: null,
+
+              submitAnswer: function (val) {
+                  this.serverResult.GoFunston = val;
+                  this.serverResult.IsObservedByUser = true;
+                  $.post("/observation", this.serverResult)
+                    .success(function (jqxhr) { $("#thanks").show(); })
+                    .error(function () { $("#problem").show(); })
+                    .complete(function () { $("#buttonSet").hide(); });
+
+              },
+              submitResultText: ko.observable('')
+
+          };
+                   
+          // console.log(viewModel);
+
+          $.ajax({
+              url: '/observations/new',
+              dataType: 'json',
+              cache: false,
+              type: 'GET',
+              success: function (result) {
+                  console.log(result);
+                  viewModel.serverResult = result;
+                  viewModel.obsTime(result.obs_date_desc);
+                  viewModel.condition(result.condition);
+                  viewModel.conditionCode(result.condition_code)
+                  viewModel.temp(result.temp);
+                  viewModel.windChill(result.wind_chill);
+                  viewModel.windMph(result.wind_mph);
+                  viewModel.windGustMph(result.wind_gust_mph);
+                  viewModel.goFunston(result.go_funston);
+
+                  if (result.go_funston == -5) {
+                      viewModel.isError(true);
+                  }
+
+                  if (result.wind_gust_mph > 0) {
+                      viewModel.windText(result.wind_mph + ' MPH gusting to ' + result.wind_gust_mph + ' MPH')
+                  } else {
+                      viewModel.windText(result.wind_mph + ' MPH');
+                  }
+
+                  if (result.wind_chill > 0) {
+                      viewModel.tempText(result.temp + 'F (feels like ' + result.wind_chill + 'F with wind chill)');
+                  } else {
+                      viewModel.tempText(result.temp + 'F');
+                  }
+
+                  if (result.hours_until_next_lowtide > -1) {
+                      viewModel.tideHours(result.hours_until_next_lowtide);
+                      if(result.hours_until_next_lowtide)
+                        viewModel.tideText('Next low tide in ' + result.hours_until_next_lowtide.toFixed(2) + ' hours');
+                  } else {
+                      viewModel.tideHours(0);
+                      viewModel.tideText('No tide data available.');
+                  }
+
+
+              },
+              error: function (result) {
+                  viewModel.isError(true);
+              },
+              complete: function () {
+                  $.backstretch("<%= asset_path 'current_observation_large.jpg' %>", {fade: 1000});
+                  viewModel.isComplete(true);
+              }
+          });
+
+          ko.applyBindings(viewModel);          
+
+      });
+
+
+      /*
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-30327448-1']);
+      _gaq.push(['_trackPageview']);
+
+      (function () {
+          var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+          ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+          var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })(); */
+   </script>

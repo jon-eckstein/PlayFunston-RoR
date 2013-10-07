@@ -1,0 +1,75 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>Id:</b>
+  <%= @observation.id %>
+</p>
+
+<p>
+  <b>Obs date desc:</b>
+  <%= @observation.obs_date_desc %>
+</p>
+
+<p>
+  <b>Condition:</b>
+  <%= @observation.condition %>
+</p>
+
+<p>
+  <b>Hours until next lowtide:</b>
+  <%= @observation.hours_until_next_lowtide %>
+</p>
+
+<p>
+  <b>Condition code:</b>
+  <%= @observation.condition_code %>
+</p>
+
+<p>
+  <b>Wind mph:</b>
+  <%= @observation.wind_mph %>
+</p>
+
+<p>
+  <b>Wind gust mph:</b>
+  <%= @observation.wind_gust_mph %>
+</p>
+
+<p>
+  <b>Temp:</b>
+  <%= @observation.temp %>
+</p>
+
+<p>
+  <b>Wind chill:</b>
+  <%= @observation.wind_chill %>
+</p>
+
+<p>
+  <b>Next low tide:</b>
+  <%= @observation.next_low_tide %>
+</p>
+
+<p>
+  <b>Weather score:</b>
+  <%= @observation.weather_score %>
+</p>
+
+<p>
+  <b>Tide score:</b>
+  <%= @observation.tide_score %>
+</p>
+
+<p>
+  <b>Observed:</b>
+  <%= @observation.observed %>
+</p>
+
+<p>
+  <b>Go funston:</b>
+  <%= @observation.go_funston %>
+</p>
+
+
+<%= link_to 'Edit', edit_observation_path(@observation) %> |
+<%= link_to 'Back', observations_path %>

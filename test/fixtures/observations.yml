@@ -1,0 +1,31 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  obs_date_desc: MyText
+  condition: MyString
+  hours_until_next_lowtide: 1.5
+  condition_code: 1
+  wind_mph: 1.5
+  wind_gust_mph: 1.5
+  temp: 1.5
+  wind_chill: 1.5
+  next_low_tide: 2013-10-05 21:44:47
+  weather_score: 1
+  tide_score: 1
+  observed: false
+  go_funston: 1
+
+two:
+  obs_date_desc: MyText
+  condition: MyString
+  hours_until_next_lowtide: 1.5
+  condition_code: 1
+  wind_mph: 1.5
+  wind_gust_mph: 1.5
+  temp: 1.5
+  wind_chill: 1.5
+  next_low_tide: 2013-10-05 21:44:47
+  weather_score: 1
+  tide_score: 1
+  observed: false
+  go_funston: 1
