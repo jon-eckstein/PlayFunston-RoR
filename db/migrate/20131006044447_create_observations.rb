@@ -14,7 +14,6 @@ class CreateObservations < ActiveRecord::Migration
       t.integer :tide_score
       t.boolean :observed
       t.integer :go_funston
-
       t.timestamps
     end
   end

@@ -7,17 +7,20 @@ require 'rails/all'
 Bundler.require(:default, Rails.env)
 
 module Playfunston
+    THRESHOLD_CONDITION_CODE_MAYBE = 0;
+    THRESHOLD_CONDITION_CODE_NO = 1;
+    THRESHOLD_WIND_MPH_MAYBE_HIGH = 25;
+    THRESHOLD_WIND_MPH_MAYBE_LOW = 15;
+    THRESHOLD_WIND_MPH_NO = 25;
+    THRESHOLD_TEMP_MAYBE_HIGH = 60;
+    THRESHOLD_TEMP_MAYBE_LOW = 45;
+    THRESHOLD_TEMP_NO = 45;
+    THRESHOLD_TIDE_MAYBE = 10;
+    THRESHOLD_TIDE_NO = 18;
   class Application < Rails::Application
-    # Settings in config/environments/* take precedence over those specified here.
-    # Application configuration should go into files in config/initializers
-    # -- all .rb files in that directory are automatically loaded.
+    
 
-    # Set Time.zone default to the specified zone and make Active Record auto-convert to this zone.
-    # Run "rake -D time" for a list of tasks for finding time zone names. Default is UTC.
-    # config.time_zone = 'Central Time (US & Canada)'
 
-    # The default locale is :en and all translations from config/locales/*.rb,yml are auto loaded.
-    # config.i18n.load_path += Dir[Rails.root.join('my', 'locales', '*.{rb,yml}').to_s]
-    # config.i18n.default_locale = :de
+
   end
 end

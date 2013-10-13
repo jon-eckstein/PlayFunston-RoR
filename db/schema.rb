@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20131006044447) do
+ActiveRecord::Schema.define(version: 20131013051535) do
 
   create_table "observations", force: true do |t|
     t.text     "obs_date_desc"
@@ -29,6 +29,7 @@ ActiveRecord::Schema.define(version: 20131006044447) do
     t.integer  "go_funston"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "hours_until_next_low_tide_desc"
   end
 
 end

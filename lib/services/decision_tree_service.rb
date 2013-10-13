@@ -26,8 +26,6 @@ class DecisionTreeService
        Observations.create!(observation)  
   end
   
-  
-  private
   def train_tree      
       @observations = Observation.all
       puts "num observations in train tree #{@observations.length}" 

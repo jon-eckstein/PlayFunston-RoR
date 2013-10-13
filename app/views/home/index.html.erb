@@ -4,21 +4,21 @@
 
 </head>
 <body >
-  <div class="container hero-unit pull-left" style="margin-left:20px; width:450px" >       
-  	<h5 style="margin-top:-40px">Should I take my dog to Fort Funston right now?</h5>    	
+  <div class="container hero-unit pull-left" style="margin-left:20px; width:400px; padding:25px" >       
+  	<h5 ><strong>Should I take my dog to Fort Funston right now?</strong></h5>    	
 	  <div data-bind="if: !isComplete()">
 	    <h5>Hmmmm..let me see...</h5> 
 	  </div>
 	  <div data-bind="css: { visible: isComplete() }" >
 	    <div data-bind="if: !isError()">
 	      <div data-bind="if: goFunston() == 1" >
-	         <h3 class="answer yes">Yes</h3>
+	         <h4 class="answer yes">Yes</h4>
 	      </div>
 	      <div data-bind="if: goFunston() == -1" >
-	         <h3 class="answer no">No</h3>
+	         <h4 class="answer no">No</h4>
 	      </div>    
 	      <div data-bind="if: goFunston() == 0" >
-	         <h3 class="answer maybe">Maybe</h3>
+	         <h4 class="answer maybe">Maybe</h4>
 	      </div>
 	    </div>
 	    <div data-bind="if: isError()">
@@ -27,17 +27,45 @@
 	    <div style="margin-top:25px;font-size:15px">
 	        <dl xmlns="http://www.w3.org/1999/xhtml" class="dl-horizontal myDl"  >              
 		          <dt>Condtions</dt>
-		          <dd data-bind="text: condition(), css: { maybe : conditionCode() == 0, no : conditionCode() > 1 }" /></dd>
+		          <dd data-bind="text: condition(), css: { maybe : conditionCode() == <%=  Playfunston::THRESHOLD_CONDITION_CODE_MAYBE %>, no : conditionCode() > <%= Playfunston::THRESHOLD_CONDITION_CODE_NO %> }" /></dd>
 		          <dt>Wind</dt>
-		          <dd data-bind="text: windText(), css: { maybe : windMph() < 25 && windMph() > 15 , no : windMph() > 25  }" /></dd>
+		          <dd data-bind="text: windText(), css: { maybe : windMph() < <%=Playfunston::THRESHOLD_WIND_MPH_MAYBE_HIGH  %> && windMph() > <%=Playfunston::THRESHOLD_WIND_MPH_MAYBE_LOW %>, no : windMph() > <%= Playfunston::THRESHOLD_WIND_MPH_NO  %>}" /></dd>
 		          <dt>Temp</dt>       
-		          <dd data-bind="text: tempText(), css: { maybe : temp() > 45 && temp() < 60, no : temp() < 45 }" /></dd>                
+		          <dd data-bind="text: tempText(), css: { maybe : temp() > <%=Playfunston::THRESHOLD_TEMP_MAYBE_LOW  %> && temp() < <%=Playfunston::THRESHOLD_TEMP_MAYBE_HIGH  %>, no : temp() < <%=Playfunston::THRESHOLD_TEMP_NO  %> }" /></dd>                
 		          <dt>Tide</dt>
-		          <dd data-bind="text: tideText(), css: { maybe : tideHours() > 10, no : tideHours() > 18 }" /></dd>
+		          <dd data-bind="text: tideText(), css: { maybe : tideHours() > <%=Playfunston::THRESHOLD_TIDE_MAYBE  %>, no : tideHours() > <%= Playfunston::THRESHOLD_TIDE_NO %>}" /></dd>
 	        </dl>
-	         <div data-bind="text: obsTime()" style="font-size:small"></div>
+	         <div data-bind="text: obsTime()" style="font-size:small"></div>           
+           <div style="margin-top:-10px; font-size:small">Webcam by <a href="http://www.flyfunston.org">flying feathers hang gliding club</a></div>
+           <a data-toggle="modal" href="#myModal" class="btn btn-link btn-xs pull-left">Suggest a different answer.</a>
 		</div>
-                   
+    
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>          
+          <h4 class="modal-title">In order to make the best decision,&#13;&#10;this site learns from your suggestions.&#13;&#10;Please contribute!</h4>
+        </div>
+        <div class="modal-body">
+           <p>Would you take your dog to Fort Funston under these conditions?</p>
+          <div id="buttonSet" style="margin-top:-10px; margin-left:-4px">
+              <button data-bind="click: function() { submitAnswer(1) }" class="btn btn-default btn-xs yes" >Yes</button>  
+              <button data-bind="click: function() { submitAnswer(0) }" class="btn btn-default btn-xs maybe">Maybe</button>  
+              <button data-bind="click: function() { submitAnswer(-1) }" class="btn btn-default btn-xs no">No</button>
+          </div>
+          <div id="thanks" class="yes" >
+              Thanks!
+          </div>
+          <div id="problem" class="no">
+              There was a problem submitting the data. Please try again later.
+          </div>          
+          <div id="submitResult">
+          </div>
+        </div>        
+      </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+  </div><!-- /.modal -->
 	    <!-- <div style="margin-top:90px">
 	      <dl>
 	         <dt>Webcam:</dt>
@@ -45,14 +73,14 @@
 	         <dd style="margin-left:0px">webcam provided by <a href="http://www.flyfunston.org">flying feathers hang gliding club</a></dd>
 	      </dl>
 	    </div> -->
-     </div>
-       
-	   <div style="margin-bottom:-20px">
+  </div>
+     <!--  
+	   <div style="margin-bottom:-20px" class="hidden">
 	        <p>Would you take your dog to Fort Funston under these conditions? <a href="#" rel="tooltip" title="In order to make the best decision,&#13;&#10;this site learns from your suggestions.&#13;&#10;Please contribute!">(why)</a> </p>
-	        <div id="buttonSet">
-	            <button data-bind="click: function() { submitAnswer(1) }" class="btn yes" >Yes</button>  
-	            <button data-bind="click: function() { submitAnswer(0) }" class="btn maybe">Maybe</button>  
-	            <button data-bind="click: function() { submitAnswer(-1) }" class="btn no">No</button>
+	        <div id="buttonSet" style="margin-top:-10px; margin-left:-4px">
+	            <button data-bind="click: function() { submitAnswer(1) }" class="btn btn-default btn-xs yes" >Yes</button>  
+	            <button data-bind="click: function() { submitAnswer(0) }" class="btn btn-default btn-xs maybe">Maybe</button>  
+	            <button data-bind="click: function() { submitAnswer(-1) }" class="btn btn-default btn-xs no">No</button>
 	        </div>
 	        <div id="thanks" class="yes" >
 	            Thanks!
@@ -63,7 +91,8 @@
 	        <div id="submitResult">
 	        </div>
 	   </div>
-    </div>  
+    </div> 
+    --> 
 </body>
   <script type="text/javascript">
       $(function () {
@@ -89,9 +118,9 @@
               serverResult: null,
 
               submitAnswer: function (val) {
-                  this.serverResult.GoFunston = val;
-                  this.serverResult.IsObservedByUser = true;
-                  $.post("/observation", this.serverResult)
+                  this.serverResult.go_funston = val;
+                  this.serverResult.observed = true;
+                  $.post("/observations", this.serverResult)
                     .success(function (jqxhr) { $("#thanks").show(); })
                     .error(function () { $("#problem").show(); })
                     .complete(function () { $("#buttonSet").hide(); });
@@ -139,7 +168,7 @@
                   if (result.hours_until_next_lowtide > -1) {
                       viewModel.tideHours(result.hours_until_next_lowtide);
                       if(result.hours_until_next_lowtide)
-                        viewModel.tideText('Next low tide in ' + result.hours_until_next_lowtide.toFixed(2) + ' hours');
+                        viewModel.tideText('Next low tide in ' + result.hours_until_next_low_tide_desc);
                   } else {
                       viewModel.tideHours(0);
                       viewModel.tideText('No tide data available.');

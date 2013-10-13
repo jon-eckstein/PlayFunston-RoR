@@ -18,23 +18,19 @@ class Observation < ActiveRecord::Base
   
   
 	def wind_text
-
 		if (self.wind_gust_mph > 0) 
 	         "#{self.wind_mph} MPH gusting to #{self.wind_gust_mph}  MPH"
 		else
 	         "#{self.wind_mph} MPH"
 		end
-
 	end
   
 	def temp_text
-
 		if (self.wind_chill > 0) 
 			"#{self.temp} F (feels like #{self.wind_chill} F with wind chill)"
 		else 
 			"#{	self.temp} F"
 		end             
-
 	end
 
 end
