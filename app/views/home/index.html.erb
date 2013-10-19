@@ -3,7 +3,7 @@
 <p id="notice"><%= notice %></p>
 
 </head>
-<body >
+<body >  
   <div class="container hero-unit pull-left" style="margin-left:20px; width:400px; padding:25px" >       
   	<h5 ><strong>Should I take my dog to Fort Funston right now?</strong></h5>    	
 	  <div data-bind="if: !isComplete()">
@@ -23,21 +23,39 @@
 	    </div>
 	    <div data-bind="if: isError()">
 	      <h1 class="no">Error occured getting weather data. Try again or go to Fort Funston at your own risk.</h1>
-	    </div>    
+	    </div>          
 	    <div style="margin-top:25px;font-size:15px">
-	        <dl xmlns="http://www.w3.org/1999/xhtml" class="dl-horizontal myDl"  >              
-		          <dt>Condtions</dt>
-		          <dd data-bind="text: condition(), css: { maybe : conditionCode() == <%=  Playfunston::THRESHOLD_CONDITION_CODE_MAYBE %>, no : conditionCode() > <%= Playfunston::THRESHOLD_CONDITION_CODE_NO %> }" /></dd>
-		          <dt>Wind</dt>
-		          <dd data-bind="text: windText(), css: { maybe : windMph() < <%=Playfunston::THRESHOLD_WIND_MPH_MAYBE_HIGH  %> && windMph() > <%=Playfunston::THRESHOLD_WIND_MPH_MAYBE_LOW %>, no : windMph() > <%= Playfunston::THRESHOLD_WIND_MPH_NO  %>}" /></dd>
-		          <dt>Temp</dt>       
-		          <dd data-bind="text: tempText(), css: { maybe : temp() > <%=Playfunston::THRESHOLD_TEMP_MAYBE_LOW  %> && temp() < <%=Playfunston::THRESHOLD_TEMP_MAYBE_HIGH  %>, no : temp() < <%=Playfunston::THRESHOLD_TEMP_NO  %> }" /></dd>                
-		          <dt>Tide</dt>
-		          <dd data-bind="text: tideText(), css: { maybe : tideHours() > <%=Playfunston::THRESHOLD_TIDE_MAYBE  %>, no : tideHours() > <%= Playfunston::THRESHOLD_TIDE_NO %>}" /></dd>
-	        </dl>
-	         <div data-bind="text: obsTime()" style="font-size:small"></div>           
-           <div style="margin-top:-10px; font-size:small">Webcam by <a href="http://www.flyfunston.org">flying feathers hang gliding club</a></div>
-           <a data-toggle="modal" href="#myModal" class="btn btn-link btn-xs pull-left">Suggest a different answer.</a>
+        <table class="table">
+          <tr>
+            <th>Conditions</th>
+            <td data-bind="text: condition()"></td>
+            <td>
+              <span data-bind="css: conditionCodeCss" class="glyphicon"></span>
+            </td>
+          </tr>          
+          <tr>
+            <th>Wind</th>
+            <td data-bind="text: windText()"></td>
+            <td><span data-bind="css: windCss" class="glyphicon"></span>
+            </td>
+          </tr>          
+          <tr>
+            <th>Temp</th>
+            <td data-bind="text: tempText()"></td>
+            <td><span data-bind="css: tempCss"  class="glyphicon"></span>
+            </td>
+          </tr>          
+          <tr>
+            <th>Next High Tide</th>
+            <td data-bind="text: tideText()"></td>
+            <td><span data-bind="css: tideCss" class="glyphicon"></span>
+            </td>
+          </tr>          
+        </table>
+        <div data-bind="text: obsTime()" style="font-size:small"></div>           
+        <div data-bind="text: imageUpdatedAt()" style="margin-top:-10px; font-size:small"></div> 
+        <div style="margin-top:-10px; font-size:small">Webcam by <a href="http://www.flyfunston.org">flying feathers hang gliding club</a></div>
+        <a data-toggle="modal" href="#myModal" class="btn btn-link btn-xs pull-left">Suggest a different answer.</a>        
 		</div>
     
     <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -65,37 +83,16 @@
         </div>        
       </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
-  </div><!-- /.modal -->
-	    <!-- <div style="margin-top:90px">
-	      <dl>
-	         <dt>Webcam:</dt>
-	         <dd style="margin-left:-5px"><img src="http://www.flyfunston.org/newwebcam/panosmall.jpg"  hspace=5 vspace=5 border="0"></dd>
-	         <dd style="margin-left:0px">webcam provided by <a href="http://www.flyfunston.org">flying feathers hang gliding club</a></dd>
-	      </dl>
-	    </div> -->
-  </div>
-     <!--  
-	   <div style="margin-bottom:-20px" class="hidden">
-	        <p>Would you take your dog to Fort Funston under these conditions? <a href="#" rel="tooltip" title="In order to make the best decision,&#13;&#10;this site learns from your suggestions.&#13;&#10;Please contribute!">(why)</a> </p>
-	        <div id="buttonSet" style="margin-top:-10px; margin-left:-4px">
-	            <button data-bind="click: function() { submitAnswer(1) }" class="btn btn-default btn-xs yes" >Yes</button>  
-	            <button data-bind="click: function() { submitAnswer(0) }" class="btn btn-default btn-xs maybe">Maybe</button>  
-	            <button data-bind="click: function() { submitAnswer(-1) }" class="btn btn-default btn-xs no">No</button>
-	        </div>
-	        <div id="thanks" class="yes" >
-	            Thanks!
-	        </div>
-	        <div id="problem" class="no">
-	            There was a problem submitting the data. Please try again later.
-	        </div>          
-	        <div id="submitResult">
-	        </div>
-	   </div>
-    </div> 
-    --> 
+  </div><!-- /.modal -->	    
+  </div>     
 </body>
   <script type="text/javascript">
       $(function () {
+
+          yesCss = 'glyphicon-ok-circle yes';
+          maybeCss = 'glyphicon-question-sign maybe';
+          noCss = 'glyphicon-remove-circle no';
+
           $('#thanks').hide();
           $('#problem').hide(); 		  		      
 
@@ -115,6 +112,7 @@
               tempText: ko.observable(''),
               tideHours: ko.observable(0),
               tideText: ko.observable(''),
+              imageUpdatedAt : ko.observable(''),
               serverResult: null,
 
               submitAnswer: function (val) {
@@ -126,11 +124,13 @@
                     .complete(function () { $("#buttonSet").hide(); });
 
               },
-              submitResultText: ko.observable('')
 
+              submitResultText: ko.observable('')
+              
           };
-                   
+                             
           // console.log(viewModel);
+          window.viewModel = viewModel;
 
           $.ajax({
               url: '/observations/new',
@@ -146,9 +146,9 @@
                   viewModel.temp(result.temp);
                   viewModel.windChill(result.wind_chill);
                   viewModel.windMph(result.wind_mph);
-                  viewModel.windGustMph(result.wind_gust_mph);
+                  viewModel.windGustMph(result.wind_gust_mph);                                    
                   viewModel.goFunston(result.go_funston);
-
+                  viewModel.imageUpdatedAt(result.image_updated_at)
                   if (result.go_funston == -5) {
                       viewModel.isError(true);
                   }
@@ -165,10 +165,10 @@
                       viewModel.tempText(result.temp + 'F');
                   }
 
-                  if (result.hours_until_next_lowtide > -1) {
-                      viewModel.tideHours(result.hours_until_next_lowtide);
-                      if(result.hours_until_next_lowtide)
-                        viewModel.tideText('Next low tide in ' + result.hours_until_next_low_tide_desc);
+                  if (result.hours_until_next_high_tide > -1) {
+                      viewModel.tideHours(result.hours_until_next_high_tide);
+                      if(result.hours_until_next_high_tide)
+                        viewModel.tideText(result.hours_until_next_high_tide_desc);
                   } else {
                       viewModel.tideHours(0);
                       viewModel.tideText('No tide data available.');
@@ -184,6 +184,56 @@
                   viewModel.isComplete(true);
               }
           });
+          
+          viewModel.conditionCodeCss = ko.computed(function() {  
+                                                  
+                                                  if (this.conditionCode() == 1){
+                                                    return yesCss;                                                      
+                                                  }  
+                                                  if(this.conditionCode() == <%=  Playfunston::THRESHOLD_CONDITION_CODE_MAYBE %>){
+                                                    return maybeCss;
+                                                  }  
+                                                  if(this.conditionCode() > <%= Playfunston::THRESHOLD_CONDITION_CODE_NO %>){
+                                                    return noCss;
+                                                  }
+                                                  
+                                              }, viewModel);
+
+          viewModel.windCss = ko.computed(function() {  
+                                                  
+                                                   if(this.windMph() < <%=Playfunston::THRESHOLD_WIND_MPH_MAYBE_HIGH  %> && this.windMph() > <%=Playfunston::THRESHOLD_WIND_MPH_MAYBE_LOW %>){
+                                                      return maybeCss;
+                                                   }
+                                                   if(this.windMph() > <%= Playfunston::THRESHOLD_WIND_MPH_NO  %>){
+                                                      return noCss;
+                                                   }
+
+                                                   return yesCss;
+                                                
+                                              }, viewModel);
+
+          viewModel.tempCss = ko.computed(function() {  
+                                                  
+                                                   if(this.temp() > <%=Playfunston::THRESHOLD_TEMP_MAYBE_LOW  %> && this.temp() < <%=Playfunston::THRESHOLD_TEMP_MAYBE_HIGH  %>){
+                                                      return maybeCss;
+                                                   } 
+                                                   if(this.temp() < <%=Playfunston::THRESHOLD_TEMP_NO  %> ){
+                                                    return noCss;
+                                                   }
+                                                   return yesCss;
+                                                
+                                              }, viewModel);
+
+          viewModel.tideCss = ko.computed(function() {  
+                                                  
+                                                   if(this.tideHours() <= <%=Playfunston::THRESHOLD_TIDE_MAYBE  %>){
+                                                    return maybeCss;
+                                                   }
+                                                   
+                                                   return yesCss;
+                                                
+                                              }, viewModel);
+
 
           ko.applyBindings(viewModel);          
 

@@ -12,16 +12,20 @@ class ObservationsController < ApplicationController
   def new          
     @observation = nil
 
-    # @observation = Rails.cache.fetch("current_observation", :expires_in => 10.minutes) do      
-    @observation = Rails.cache.fetch("current_observation", :expires_in => 1.seconds) do      
+    @observation = Rails.cache.fetch("current_observation", :expires_in => 10.minutes) do      
+    # @observation = Rails.cache.fetch("current_observation", :expires_in => 1.seconds) do      
       puts "here getting observation"
-      uri = URI("http://api.wunderground.com/api/f88d918861288deb/conditions/tide/q/pws:KCASANFR69.json")
+      # wunderground_api_key = "f88d918861288deb";
+      wunderground_api_key = ENV["WUNDERGROUND_API_KEY"];      
+      uri = URI("http://api.wunderground.com/api/#{wunderground_api_key}/conditions/tide/astronomy/q/pws:KCASANFR69.json")
       obs_json = Net::HTTP.get(uri)      
-      hash = ActiveSupport::JSON.decode(obs_json)       
+      hash = ActiveSupport::JSON.decode(obs_json)             
+      # puts hash["sun_phase"]["sunrise"].to_s
       current_obs = hash["current_observation"]
       #get the observation...
       observation = Observation.new  
-      observation.obs_date_desc = current_obs["observation_time"]
+      weather_updated_desc = current_obs["observation_time"].gsub! 'Last Updated on', 'Weather last updated on' 
+      observation.obs_date_desc = weather_updated_desc
       observation.condition = current_obs["weather"]
       observation.wind_mph = current_obs["wind_mph"]
       observation.temp = current_obs["temp_f"]
@@ -30,6 +34,8 @@ class ObservationsController < ApplicationController
       
       #get the tide data...
       tide_summary = hash["tide"]["tideSummary"];
+      puts tide_summary
+
       if tide_summary.count > 0
           next_low_tide = get_next_low_tide(tide_summary)
           if next_low_tide
@@ -41,18 +47,32 @@ class ObservationsController < ApplicationController
             observation.hours_until_next_low_tide_desc = distance_of_time_in_words(next_low_tide,Time.now.to_datetime)
             # puts "text: " + observation.hours_until_next_low_tide_desc
             # puts "low tide: " + next_low_tide.to_s + ", now: " +  Time.now.to_datetime.to_s + ", diff: %.2f" % ((next_low_tide.to_time - Time.now) / 1.hour)            
-          end 
+          end
+
+          next_high_tide = get_next_high_tide(tide_summary)
+          if next_high_tide
+            observation.next_high_tide = next_high_tide.in_time_zone("Pacific Time (US & Canada)").to_s
+            observation.hours_until_next_high_tide = (next_high_tide.to_time - Time.now.to_datetime) / 1.hour 
+            observation.hours_until_next_high_tide_desc = distance_of_time_in_words(next_high_tide,Time.now.to_datetime)
+          end
+
       end
       
 
       dts = DecisionTreeService.instance
       observation.go_funston = dts.get_decision(observation)
 
-      #get the observation image...
-      # path = Rails.root.join("app", "assets", "images", "current_observation_large.jpg").to_s
-      # open(path, 'wb') do |file|
-      #   file << open('http://www.flyfunston.org/newwebcam/panolarge.jpg').read
-      # end
+      #get the observation image and last update date...      
+      image_uri = URI("http://www.flyfunston.org/newwebcam/panolarge.jpg")
+      res = Net::HTTP.get_response(image_uri)
+      # puts res.to_hash.to_s
+      last_modified_dt =res.to_hash["last-modified"].to_s
+      # puts res.to_hash["last-modified"]
+      observation.image_updated_at = Time.parse(last_modified_dt).in_time_zone("Pacific Time (US & Canada)").strftime("Image last updated on %B %d %H:%M %p %Z")
+      path = Rails.root.join("app", "assets", "images", "current_observation_large.jpg").to_s        
+      open(path, 'wb') do |file|
+        file << res.body
+      end
       
       observation  
     end
@@ -121,9 +141,17 @@ class ObservationsController < ApplicationController
 
 
     def get_next_low_tide(tide_summary)
+      return get_next_tide(tide_summary, "Ebb")
+    end
+
+    def get_next_high_tide(tide_summary)
+      return get_next_tide(tide_summary, "Flood")
+    end  
+
+    def get_next_tide(tide_summary, tide_direction)
       tide_summary.each do |tide| 
         # puts tide
-        if tide["data"]["type"] == "Max Ebb"
+        if tide["data"]["type"] == "Max #{tide_direction}"  
           tide_epoch = tide["utcdate"]["epoch"]          
           tide_date = Time.at(tide_epoch.to_i).to_datetime 
           # puts "tide date: " + tide_date.to_s         
