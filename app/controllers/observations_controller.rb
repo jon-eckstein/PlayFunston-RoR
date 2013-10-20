@@ -68,7 +68,7 @@ class ObservationsController < ApplicationController
       # puts res.to_hash.to_s
       last_modified_dt =res.to_hash["last-modified"].to_s
       # puts res.to_hash["last-modified"]
-      observation.image_updated_at = Time.parse(last_modified_dt).in_time_zone("Pacific Time (US & Canada)").strftime("Image last updated on %B %d %H:%M %p %Z")
+      observation.image_updated_at = Time.parse(last_modified_dt).in_time_zone("Pacific Time (US & Canada)").strftime("Image last updated on %B %d %l:%M %p %Z")
       path = Rails.root.join("app", "assets", "images", "current_observation_large.jpg").to_s        
       open(path, 'wb') do |file|
         file << res.body
