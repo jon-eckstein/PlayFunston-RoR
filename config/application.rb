@@ -15,7 +15,8 @@ module Playfunston
     THRESHOLD_TEMP_MAYBE_HIGH = 55;
     THRESHOLD_TEMP_MAYBE_LOW = 45;
     THRESHOLD_TEMP_NO = 45;
-    THRESHOLD_TIDE_MAYBE = 2;    
+    THRESHOLD_TIDE_MAYBE_LOW = 3;    
+    THRESHOLD_TIDE_MAYBE_HIGH = 6;    
   class Application < Rails::Application
     
 

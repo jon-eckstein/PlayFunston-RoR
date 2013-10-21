@@ -46,8 +46,8 @@
             </td>
           </tr>          
           <tr>
-            <th>Next High Tide</th>
-            <td data-bind="text: tideText()"></td>
+            <th>Tide</th>
+            <td data-bind="html: tideText()"></td>
             <td><span data-bind="css: tideCss" class="glyphicon"></span>
             </td>
           </tr>          
@@ -165,10 +165,10 @@
                       viewModel.tempText(result.temp + 'F');
                   }
 
-                  if (result.hours_until_next_high_tide > -1) {
+                  if (result.hours_until_next_high_tide > -1 && result.hours_until_next_lowtide > -1) {
                       viewModel.tideHours(result.hours_until_next_high_tide);
                       if(result.hours_until_next_high_tide)
-                        viewModel.tideText(result.hours_until_next_high_tide_desc);
+                        viewModel.tideText('Next low: ' + result.hours_until_next_low_tide_desc + " <br> Next high: " + result.hours_until_next_high_tide_desc);
                   } else {
                       viewModel.tideHours(0);
                       viewModel.tideText('No tide data available.');
@@ -226,7 +226,7 @@
 
           viewModel.tideCss = ko.computed(function() {  
                                                   
-                                                   if(this.tideHours() <= <%=Playfunston::THRESHOLD_TIDE_MAYBE  %>){
+                                                   if(this.tideHours() >= <%=Playfunston::THRESHOLD_TIDE_MAYBE_HIGH  %> || this.tideHours() <= <%=Playfunston::THRESHOLD_TIDE_MAYBE_LOW  %>){
                                                     return maybeCss;
                                                    }
                                                    
