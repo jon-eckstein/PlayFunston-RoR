@@ -14,8 +14,7 @@ class ObservationsController < ApplicationController
 
     @observation = Rails.cache.fetch("current_observation", :expires_in => 10.minutes) do      
     # @observation = Rails.cache.fetch("current_observation", :expires_in => 1.seconds) do      
-      puts "here getting observation"
-      # wunderground_api_key = "f88d918861288deb";
+      puts "here getting observation"      
       wunderground_api_key = ENV["WUNDERGROUND_API_KEY"];      
       uri = URI("http://api.wunderground.com/api/#{wunderground_api_key}/conditions/tide/astronomy/q/pws:KCASANFR69.json")
       obs_json = Net::HTTP.get(uri)      
@@ -34,7 +33,7 @@ class ObservationsController < ApplicationController
       
       #get the tide data...
       tide_summary = hash["tide"]["tideSummary"];
-      puts tide_summary
+      # puts tide_summary
 
       if tide_summary.count > 0
           next_low_tide = get_next_low_tide(tide_summary)
@@ -69,10 +68,11 @@ class ObservationsController < ApplicationController
       last_modified_dt =res.to_hash["last-modified"].to_s
       # puts res.to_hash["last-modified"]
       observation.image_updated_at = Time.parse(last_modified_dt).in_time_zone("Pacific Time (US & Canada)").strftime("Image last updated on %B %d, %l:%M %p %Z")
-      path = Rails.root.join("app", "assets", "images", "current_observation_large.jpg").to_s        
-      open(path, 'wb') do |file|
-        file << res.body
-      end
+      Rails.cache.write('observation_image', res.body)      
+      # path = Rails.root.join("app", "assets", "images", "current_observation_large.jpg").to_s        
+      # open(path, 'wb') do |file|
+      #   file << res.body
+      # end
       
       observation  
     end
@@ -84,6 +84,13 @@ class ObservationsController < ApplicationController
     #   format.html index.html.erb
     #   format.json { render json: @observation }
     # end
+  end
+
+  def image    
+      img = Rails.cache.fetch("observation_image")
+      if !img.nil?
+        send_data Rails.cache.fetch("observation_image"), :type => "image/jpeg", :disposition => 'inline'    
+      end 
   end
 
   # GET /observations

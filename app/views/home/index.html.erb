@@ -180,7 +180,7 @@
                   viewModel.isError(true);
               },
               complete: function () {
-                  $.backstretch("<%= asset_path 'current_observation_large.jpg' %>", {fade: 1000});
+                  $.backstretch("/observations/image", {fade: 1000});
                   viewModel.isComplete(true);
               }
           });
