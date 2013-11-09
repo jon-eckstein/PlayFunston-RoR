@@ -14,17 +14,17 @@ class ObservationsController < ApplicationController
 
     @observation = Rails.cache.fetch("current_observation", :expires_in => 10.minutes) do      
     # @observation = Rails.cache.fetch("current_observation", :expires_in => 1.seconds) do      
-      puts "here getting observation"      
+      # puts "here getting observation"      
       wunderground_api_key = ENV["WUNDERGROUND_API_KEY"];      
       uri = URI("http://api.wunderground.com/api/#{wunderground_api_key}/conditions/tide/astronomy/q/pws:KCASANFR69.json")
       obs_json = Net::HTTP.get(uri)      
       hash = ActiveSupport::JSON.decode(obs_json)             
-      # puts hash["sun_phase"]["sunrise"].to_s
+      puts hash
       current_obs = hash["current_observation"]
       #get the observation...
-      observation = Observation.new  
-      weather_updated_desc = current_obs["observation_time"].gsub! 'Last Updated on', 'Weather last updated on' 
-      observation.obs_date_desc = weather_updated_desc
+      observation = Observation.new        
+      weather_updated_desc = current_obs["observation_time"].gsub! 'Last Updated on', 'Weather last updated on'       
+      observation.obs_date_desc = weather_updated_desc[0..-4] #clear the timezone..lazy way
       observation.condition = current_obs["weather"]
       observation.wind_mph = current_obs["wind_mph"]
       observation.temp = current_obs["temp_f"]
@@ -67,7 +67,7 @@ class ObservationsController < ApplicationController
       # puts res.to_hash.to_s
       last_modified_dt =res.to_hash["last-modified"].to_s
       # puts res.to_hash["last-modified"]
-      observation.image_updated_at = Time.parse(last_modified_dt).in_time_zone("Pacific Time (US & Canada)").strftime("Image last updated on %B %d, %l:%M %p %Z")
+      observation.image_updated_at = Time.parse(last_modified_dt).in_time_zone("Pacific Time (US & Canada)").strftime("Image last updated on %B %d, %l:%M %p")
       Rails.cache.write('observation_image', res.body)      
       # path = Rails.root.join("app", "assets", "images", "current_observation_large.jpg").to_s        
       # open(path, 'wb') do |file|
