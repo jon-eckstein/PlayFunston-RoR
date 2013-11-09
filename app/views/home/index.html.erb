@@ -9,7 +9,7 @@
 	  <div data-bind="if: !isComplete()">
 	    <h5>Hmmmm..let me see...</h5> 
 	  </div>
-	  <div data-bind="css: { visible: isComplete() }" >
+	  <div data-bind="css: { visible: isComplete() }" class="text-center">
 	    <div data-bind="if: !isError()">
 	      <div data-bind="if: goFunston() == 1" >
 	         <h4 class="answer yes">Yes</h4>
@@ -28,34 +28,34 @@
         <table class="table">
           <tr>
             <th>Conditions</th>
-            <td data-bind="text: condition()"></td>
+            <td data-bind="text: condition()" class="text-left"></td>
             <td>
               <span data-bind="css: conditionCodeCss" class="glyphicon"></span>
             </td>
           </tr>          
           <tr>
             <th>Wind</th>
-            <td data-bind="text: windText()"></td>
+            <td data-bind="text: windText()" class="text-left"></td>
             <td><span data-bind="css: windCss" class="glyphicon"></span>
             </td>
           </tr>          
           <tr>
             <th>Temp</th>
-            <td data-bind="text: tempText()"></td>
+            <td data-bind="text: tempText()" class="text-left"></td>
             <td><span data-bind="css: tempCss"  class="glyphicon"></span>
             </td>
           </tr>          
           <tr>
             <th>Tide</th>
-            <td data-bind="html: tideText()"></td>
+            <td data-bind="html: tideText()" class="text-left"></td>
             <td><span data-bind="css: tideCss" class="glyphicon"></span>
             </td>
           </tr>          
         </table>
-        <div data-bind="text: obsTime()" style="font-size:small"></div>           
-        <div data-bind="text: imageUpdatedAt()" style="margin-top:-10px; font-size:small"></div> 
-        <div style="margin-top:-10px; font-size:small">Webcam by <a href="http://www.flyfunston.org">flying feathers hang gliding club</a></div>
-        <a data-toggle="modal" href="#myModal" class="btn btn-link btn-xs pull-left">Suggest a different answer.</a>        
+        <div data-bind="text: obsTime()" style="font-size:small" class="text-left"></div>           
+        <div data-bind="text: imageUpdatedAt()" style="margin-top:-10px; font-size:small" class="text-left"></div> 
+        <div style="margin-top:-10px; font-size:small" class="text-left">Webcam by <a href="http://www.flyfunston.org">flying feathers hang gliding club</a></div>
+        <!--<a data-toggle="modal" href="#myModal" class="btn btn-link btn-xs text-center">Suggest a different answer.</a> -->       
 		</div>
     
     <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -66,7 +66,7 @@
           <h4 class="modal-title">In order to make the best decision,&#13;&#10;this site learns from your suggestions.&#13;&#10;Please contribute!</h4>
         </div>
         <div class="modal-body">
-           <p>Would you take your dog to Fort Funston under these conditions?</p>
+          <p>Would you take your dog to Fort Funston under these conditions?</p>
           <div id="buttonSet" style="margin-top:-10px; margin-left:-4px">
               <button data-bind="click: function() { submitAnswer(1) }" class="btn btn-default btn-xs yes" >Yes</button>  
               <button data-bind="click: function() { submitAnswer(0) }" class="btn btn-default btn-xs maybe">Maybe</button>  
@@ -90,7 +90,7 @@
       $(function () {
 
           yesCss = 'glyphicon-ok-circle yes';
-          maybeCss = 'glyphicon-question-sign maybe';
+          maybeCss = 'glyphicon-minus-sign maybe';
           noCss = 'glyphicon-remove-circle no';
 
           $('#thanks').hide();
