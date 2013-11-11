@@ -5,7 +5,8 @@
 
 Observation.create!(condition_code: 0, temp: 70, wind_chill: 0, wind_mph: 2, wind_gust_mph: 2, go_funston: 1)
 Observation.create!(condition_code: 0, temp: 60, wind_chill: 0, wind_mph: 5, wind_gust_mph: 5, go_funston: 1)
-Observation.create!(condition_code: 0, temp: 50, wind_chill: 0, wind_mph: 13, wind_gust_mph: 10, go_funston: 1)
+Observation.create!(condition_code: 0, temp: 55, wind_chill: 0, wind_mph: 13, wind_gust_mph: 10, go_funston: 1)
+Observation.create!(condition_code: 0, temp: 50, wind_chill: 0, wind_mph: 2, wind_gust_mph: 2, go_funston: 0)
 Observation.create!(condition_code: 0, temp: 55, wind_chill: 50, wind_mph: 15, wind_gust_mph: 10, go_funston: 0)
 Observation.create!(condition_code: 0, temp: 45, wind_chill: 0, wind_mph: 20, wind_gust_mph: 30, go_funston: -1)
 Observation.create!(condition_code: 1, temp: 60, wind_chill: 0, wind_mph: 2, wind_gust_mph: 2, go_funston: 1)

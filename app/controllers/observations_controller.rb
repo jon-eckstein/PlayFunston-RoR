@@ -8,19 +8,22 @@ class ObservationsController < ApplicationController
   before_action :set_observation, only: [:show, :edit, :update, :destroy]
 
   
+  
   # GET /observations/new
   def new          
+    timezone = "Pacific Time (US & Canada)"
     @observation = nil
 
-    @observation = Rails.cache.fetch("current_observation", :expires_in => 10.minutes) do      
-    # @observation = Rails.cache.fetch("current_observation", :expires_in => 1.seconds) do      
+    # @observation = Rails.cache.fetch("current_observation", :expires_in => 10.minutes) do      
+    @observation = Rails.cache.fetch("current_observation", :expires_in => 1.seconds) do      
       # puts "here getting observation"      
       wunderground_api_key = ENV["WUNDERGROUND_API_KEY"];      
       uri = URI("http://api.wunderground.com/api/#{wunderground_api_key}/conditions/tide/astronomy/q/pws:KCASANFR69.json")
       obs_json = Net::HTTP.get(uri)      
       hash = ActiveSupport::JSON.decode(obs_json)             
-      puts hash
+      # puts obs_json
       current_obs = hash["current_observation"]
+      
       #get the observation...
       observation = Observation.new        
       weather_updated_desc = current_obs["observation_time"].gsub! 'Last Updated on', 'Weather last updated on'       
@@ -38,7 +41,7 @@ class ObservationsController < ApplicationController
       if tide_summary.count > 0
           next_low_tide = get_next_low_tide(tide_summary)
           if next_low_tide
-            observation.next_low_tide = next_low_tide.in_time_zone("Pacific Time (US & Canada)").to_s
+            observation.next_low_tide = next_low_tide.in_time_zone(timezone).to_s
             # tide_diff = (next_low_tide - Time.now.to_datetime)
             # hours,minutes,seconds,frac = Date.send(:day_fraction_to_time, tide_diff)
             # puts "hours: " + hours.to_s
@@ -50,7 +53,7 @@ class ObservationsController < ApplicationController
 
           next_high_tide = get_next_high_tide(tide_summary)
           if next_high_tide
-            observation.next_high_tide = next_high_tide.in_time_zone("Pacific Time (US & Canada)").to_s
+            observation.next_high_tide = next_high_tide.in_time_zone(timezone).to_s
             observation.hours_until_next_high_tide = (next_high_tide.to_time - Time.now.to_datetime) / 1.hour 
             observation.hours_until_next_high_tide_desc = distance_of_time_in_words(next_high_tide,Time.now.to_datetime)
           end
@@ -58,21 +61,30 @@ class ObservationsController < ApplicationController
       end
       
 
-      dts = DecisionTreeService.instance
-      observation.go_funston = dts.get_decision(observation)
+      sun_phase = hash["sun_phase"]
+      sunrise = Time.new(Time.now.year, Time.now.month, Time.now.day, sun_phase["sunrise"]["hour"],sun_phase["sunrise"]["minute"]).in_time_zone(timezone)            
+      sunset = Time.new(Time.now.year, Time.now.month, Time.now.day, sun_phase["sunset"]["hour"],sun_phase["sunset"]["minute"]).in_time_zone(timezone)
+      puts "sunrise: #{sunrise}"       
+      puts "sunset: #{sunset}"       
+      observation.sunrise = sunrise 
+      observation.sunset = sunset      
+      
+      observation.is_park_closed = !(((Time.now <=> sunrise) > -1) && ((Time.now <=> sunset) < 1))
+      
+      if observation.is_park_closed
+        observation.go_funston = -1
+      else  
+        dts = DecisionTreeService.instance
+        observation.go_funston = dts.get_decision(observation)
+      end
 
       #get the observation image and last update date...      
-      image_uri = URI("http://www.flyfunston.org/newwebcam/panolarge.jpg")
-      res = Net::HTTP.get_response(image_uri)
-      # puts res.to_hash.to_s
-      last_modified_dt =res.to_hash["last-modified"].to_s
-      # puts res.to_hash["last-modified"]
-      observation.image_updated_at = Time.parse(last_modified_dt).in_time_zone("Pacific Time (US & Canada)").strftime("Image last updated on %B %d, %l:%M %p")
-      Rails.cache.write('observation_image', res.body)      
-      # path = Rails.root.join("app", "assets", "images", "current_observation_large.jpg").to_s        
-      # open(path, 'wb') do |file|
-      #   file << res.body
-      # end
+      # image_uri = URI("http://www.flyfunston.org/newwebcam/panolarge.jpg")
+      # res = Net::HTTP.get_response(image_uri)      
+      # last_modified_dt =res.to_hash["last-modified"].to_s    
+      # observation.image_updated_at = Time.parse(last_modified_dt).in_time_zone(timezone).strftime("Image last updated on %B %d, %l:%M %p")
+      # Rails.cache.write('observation_image', res.body)      
+      
       
       observation  
     end

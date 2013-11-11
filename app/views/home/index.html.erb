@@ -23,8 +23,11 @@
 	    </div>
 	    <div data-bind="if: isError()">
 	      <h1 class="no">Error occured getting weather data. Try again or go to Fort Funston at your own risk.</h1>
-	    </div>          
-	    <div style="margin-top:25px;font-size:15px">
+	    </div>
+      <div data-bind="if: isParkClosed()">
+        <h2 class="no">Park is Closed</h2>
+      </div>
+	    <div data-bind="ifnot: isParkClosed()" style="margin-top:25px;font-size:15px">
         <table class="table">
           <tr>
             <th>Conditions</th>
@@ -113,6 +116,7 @@
               tideHours: ko.observable(0),
               tideText: ko.observable(''),
               imageUpdatedAt : ko.observable(''),
+              isParkClosed : ko.observable(false),
               serverResult: null,
 
               submitAnswer: function (val) {
@@ -148,7 +152,9 @@
                   viewModel.windMph(result.wind_mph);
                   viewModel.windGustMph(result.wind_gust_mph);                                    
                   viewModel.goFunston(result.go_funston);
-                  viewModel.imageUpdatedAt(result.image_updated_at)
+                  viewModel.imageUpdatedAt(result.image_updated_at);
+                  viewModel.isParkClosed(result.is_park_closed);
+
                   if (result.go_funston == -5) {
                       viewModel.isError(true);
                   }

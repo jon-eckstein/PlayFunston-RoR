@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20131019161026) do
+ActiveRecord::Schema.define(version: 20131111045952) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -37,6 +37,9 @@ ActiveRecord::Schema.define(version: 20131019161026) do
     t.datetime "next_high_tide"
     t.float    "hours_until_next_high_tide"
     t.string   "hours_until_next_high_tide_desc"
+    t.datetime "sunrise"
+    t.datetime "sunset"
+    t.boolean  "is_park_closed"
   end
 
 end
