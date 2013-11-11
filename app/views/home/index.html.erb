@@ -22,12 +22,12 @@
 	      </div>
 	    </div>
 	    <div data-bind="if: isError()">
-	      <h1 class="no">Error occured getting weather data. Try again or go to Fort Funston at your own risk.</h1>
+	      <h3 class="no">Error occured getting weather data. Try again or go to Fort Funston at your own risk.</h3>
 	    </div>
       <div data-bind="if: isParkClosed()">
         <h2 class="no">Park is Closed</h2>
       </div>
-	    <div data-bind="ifnot: isParkClosed()" style="margin-top:25px;font-size:15px">
+	    <div data-bind="if: showConditions()" style="margin-top:25px;font-size:15px">
         <table class="table">
           <tr>
             <th>Conditions</th>
@@ -239,6 +239,10 @@
                                                    return yesCss;
                                                 
                                               }, viewModel);
+
+          viewModel.showConditions = ko.computed(function() {
+            return this.isComplete() && !this.isParkClosed() && !this.isError();
+          }, viewModel);
 
 
           ko.applyBindings(viewModel);          

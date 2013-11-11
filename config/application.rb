@@ -17,8 +17,10 @@ module Playfunston
     THRESHOLD_TEMP_NO = 45;
     THRESHOLD_TIDE_MAYBE_LOW = 3;    
     THRESHOLD_TIDE_MAYBE_HIGH = 6;    
+
   class Application < Rails::Application
-    
+    config.time_zone = 'Pacific Time (US & Canada)'
+    config.active_record.default_timezone = 'Pacific Time (US & Canada)'
 
 
 
