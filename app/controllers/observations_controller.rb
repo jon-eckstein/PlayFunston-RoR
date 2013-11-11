@@ -14,8 +14,8 @@ class ObservationsController < ApplicationController
     timezone = "Pacific Time (US & Canada)"
     @observation = nil
 
-    # @observation = Rails.cache.fetch("current_observation", :expires_in => 10.minutes) do      
-    @observation = Rails.cache.fetch("current_observation", :expires_in => 1.seconds) do      
+    @observation = Rails.cache.fetch("current_observation", :expires_in => 10.minutes) do      
+    # @observation = Rails.cache.fetch("current_observation", :expires_in => 1.seconds) do      
       # puts "here getting observation"      
       wunderground_api_key = ENV["WUNDERGROUND_API_KEY"];      
       uri = URI("http://api.wunderground.com/api/#{wunderground_api_key}/conditions/tide/astronomy/q/pws:KCASANFR69.json")
@@ -67,8 +67,7 @@ class ObservationsController < ApplicationController
       puts "sunrise: #{sunrise}"       
       puts "sunset: #{sunset}"       
       observation.sunrise = sunrise 
-      observation.sunset = sunset      
-      
+      observation.sunset = sunset            
       observation.is_park_closed = !(((Time.now <=> sunrise) > -1) && ((Time.now <=> sunset) < 1))
       
       if observation.is_park_closed
