@@ -79,11 +79,11 @@ class ObservationsController < ApplicationController
       end
 
       #get the observation image and last update date...      
-      # image_uri = URI("http://www.flyfunston.org/newwebcam/panolarge.jpg")
-      # res = Net::HTTP.get_response(image_uri)      
-      # last_modified_dt =res.to_hash["last-modified"].to_s    
-      # observation.image_updated_at = Time.parse(last_modified_dt).in_time_zone(timezone).strftime("Image last updated on %B %d, %l:%M %p")
-      # Rails.cache.write('observation_image', res.body)      
+      image_uri = URI("http://www.flyfunston.org/newwebcam/panolarge.jpg")
+      res = Net::HTTP.get_response(image_uri)      
+      last_modified_dt =res.to_hash["last-modified"].to_s    
+      observation.image_updated_at = Time.parse(last_modified_dt).in_time_zone(timezone).strftime("Image last updated on %B %d, %l:%M %p")
+      Rails.cache.write('observation_image', res.body)      
       
       
       observation  
