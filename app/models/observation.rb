@@ -9,7 +9,7 @@ class Observation < ActiveRecord::Base
 		if (["Clear", "Partly Cloudy", "Scattered Clouds", "Haze"].include?(self.condition) )
 		   return 1
 		end
-		if (["Mostly Cloudy", "Overcast", "Fog", "Mist"].include?(self.condition))
+		if (["Mostly Cloudy", "Overcast", "Fog"].include?(self.condition))
 		   return 0;
 		end
 

@@ -199,7 +199,7 @@
                                                   if(this.conditionCode() == <%=  Playfunston::THRESHOLD_CONDITION_CODE_MAYBE %>){
                                                     return maybeCss;
                                                   }  
-                                                  if(this.conditionCode() > <%= Playfunston::THRESHOLD_CONDITION_CODE_NO %>){
+                                                  if(this.conditionCode() < <%= Playfunston::THRESHOLD_CONDITION_CODE_MAYBE %>){
                                                     return noCss;
                                                   }
                                                   
@@ -207,7 +207,7 @@
 
           viewModel.windCss = ko.computed(function() {  
                                                   
-                                                   if(this.windMph() < <%=Playfunston::THRESHOLD_WIND_MPH_MAYBE_HIGH  %> && this.windMph() > <%=Playfunston::THRESHOLD_WIND_MPH_MAYBE_LOW %>){
+                                                   if(this.windMph() <= <%=Playfunston::THRESHOLD_WIND_MPH_MAYBE_HIGH  %> && this.windMph() > <%=Playfunston::THRESHOLD_WIND_MPH_MAYBE_LOW %>){
                                                       return maybeCss;
                                                    }
                                                    if(this.windMph() > <%= Playfunston::THRESHOLD_WIND_MPH_NO  %>){
@@ -241,6 +241,7 @@
                                               }, viewModel);
 
           viewModel.showConditions = ko.computed(function() {
+            // return this.isComplete();
             return this.isComplete() && !this.isParkClosed() && !this.isError();
           }, viewModel);
 

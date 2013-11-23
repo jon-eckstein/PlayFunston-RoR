@@ -11,7 +11,7 @@ module Playfunston
     THRESHOLD_CONDITION_CODE_NO = 1;
     THRESHOLD_WIND_MPH_MAYBE_HIGH = 15;
     THRESHOLD_WIND_MPH_MAYBE_LOW = 8;
-    THRESHOLD_WIND_MPH_NO = 25;
+    THRESHOLD_WIND_MPH_NO = 16;
     THRESHOLD_TEMP_MAYBE_HIGH = 55;
     THRESHOLD_TEMP_MAYBE_LOW = 45;
     THRESHOLD_TEMP_NO = 45;
@@ -21,8 +21,5 @@ module Playfunston
   class Application < Rails::Application
     config.time_zone = 'Pacific Time (US & Canada)'
     config.active_record.default_timezone = 'Pacific Time (US & Canada)'
-
-
-
   end
 end
