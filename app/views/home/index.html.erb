@@ -53,14 +53,21 @@
             <td data-bind="html: tideText()" class="text-left"></td>
             <td><span data-bind="css: tideCss" class="glyphicon"></span>
             </td>
-          </tr>          
+          </tr>                        
         </table>
-        <div style="font-size:small" class="text-left">*<span data-bind="text: obsTime()"></span></div>           
-        <div style="margin-top:-10px; font-size:small" class="text-left">*<span data-bind="text: imageUpdatedAt()"></div> 
-        <div style="margin-top:-10px; font-size:small" class="text-left">Webcam by <a href="http://www.flyfunston.org">flying feathers hang gliding club</a></div>
+
+        <div style="font-size:small" class="text-left"><span data-bind="text: obsTime()"></span></div>           
+        <div style="margin-top:-10px; font-size:small" class="text-left"><span data-bind="text: imageUpdatedAt()"></div> 
+        <div style="margin-top:-10px; font-size:small" class="text-left">Weather data by <a href="http://www.wunderground.com">Wunderground</a></div>
+        <div style="margin-top:-10px; font-size:small" class="text-left">Webcam by <a href="http://www.flyfunston.org">Flying Feathers Hang Gliding Club</a></div>
         <!--<a data-toggle="modal" href="#myModal" class="btn btn-link btn-xs text-center">Suggest a different answer.</a> -->       
 		</div>
-    
+    <!--<div class="container hero-unit navbar navbar-fixed-bottom" style="margin-left:20px; margin-bottom:20px; width:400px; padding-left:25px; padding-right:25px; padding-top:10px" >
+        <div style="font-size:x-small" class="text-left"><span data-bind="text: obsTime()"></span></div>           
+        <div style="margin-top:-10px; font-size:x-small" class="text-left"><span data-bind="text: imageUpdatedAt()"></div>
+        <div style="margin-top:-10px; font-size:x-small" class="text-left">Weather data by <a href="http://www.wunderground.com">Wunderground</a></div>
+        <div style="margin-top:-10px; font-size:x-small" class="text-left">Webcam by <a href="http://www.flyfunston.org">Flying Feathers Hang Gliding club</a></div>
+    </div>-->
     <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
@@ -172,7 +179,7 @@
                   }
 
                   if (result.hours_until_next_high_tide > -1 && result.hours_until_next_lowtide > -1) {
-                      viewModel.tideHours(result.hours_until_next_high_tide);
+                      viewModel.tideHours(result.hours_until_next_lowtide);
                       if(result.hours_until_next_high_tide)
                         viewModel.tideText('Next low: ' + result.hours_until_next_low_tide_desc + " <br> Next high: " + result.hours_until_next_high_tide_desc);
                   } else {
@@ -233,10 +240,10 @@
           viewModel.tideCss = ko.computed(function() {  
                                                   
                                                    if(this.tideHours() >= <%=Playfunston::THRESHOLD_TIDE_MAYBE_HIGH  %> || this.tideHours() <= <%=Playfunston::THRESHOLD_TIDE_MAYBE_LOW  %>){
-                                                    return maybeCss;
+                                                    return yesCss;
                                                    }
                                                    
-                                                   return yesCss;
+                                                   return maybeCss;
                                                 
                                               }, viewModel);
 

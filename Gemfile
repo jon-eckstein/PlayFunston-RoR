@@ -37,6 +37,7 @@ gem 'anjlab-bootstrap-rails', :require => 'bootstrap-rails', :github => 'anjlab/
 
 gem 'rails_12factor', group: :production
 
+gem "rmagick", "2.12.0", :require => 'RMagick'
 
 # gem 'mongoid', github: 'mongoid/mongoid'
 

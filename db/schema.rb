@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20131111045952) do
+ActiveRecord::Schema.define(version: 20131124164519) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -40,6 +40,7 @@ ActiveRecord::Schema.define(version: 20131111045952) do
     t.datetime "sunrise"
     t.datetime "sunset"
     t.boolean  "is_park_closed"
+    t.integer  "blue_score"
   end
 
 end

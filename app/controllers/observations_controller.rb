@@ -14,12 +14,12 @@ class ObservationsController < ApplicationController
     timezone = "Pacific Time (US & Canada)"
     @observation = nil
 
-    @observation = Rails.cache.fetch("current_observation", :expires_in => 10.minutes) do      
-    # @observation = Rails.cache.fetch("current_observation", :expires_in => 1.seconds) do      
+    #@observation = Rails.cache.fetch("current_observation", :expires_in => 10.minutes) do      
+    @observation = Rails.cache.fetch("current_observation", :expires_in => 1.seconds) do      
       # puts "here getting observation"      
       wunderground_api_key = ENV["WUNDERGROUND_API_KEY"];      
       uri = URI("http://api.wunderground.com/api/#{wunderground_api_key}/conditions/tide/astronomy/q/pws:KCASANFR69.json")
-      obs_json = Net::HTTP.get(uri)      
+      obs_json = Net::HTTP.get(uri)         
       hash = ActiveSupport::JSON.decode(obs_json)             
       # puts obs_json
       current_obs = hash["current_observation"]
@@ -75,6 +75,7 @@ class ObservationsController < ApplicationController
       else  
         dts = DecisionTreeService.instance
         observation.go_funston = dts.get_decision(observation)
+        puts "here after got decision"
       end
 
       #get the observation image and last update date...      
