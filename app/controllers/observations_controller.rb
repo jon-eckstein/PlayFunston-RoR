@@ -14,8 +14,8 @@ class ObservationsController < ApplicationController
     timezone = "Pacific Time (US & Canada)"
     @observation = nil
 
-    # @observation = Rails.cache.fetch("current_observation", :expires_in => 10.minutes) do
-    @observation = Rails.cache.fetch("current_observation", :expires_in => 0.seconds) do
+    @observation = Rails.cache.fetch("current_observation", :expires_in => 10.minutes) do
+    # @observation = Rails.cache.fetch("current_observation", :expires_in => 0.seconds) do
       # puts "here getting observation"      
       wunderground_api_key = ENV["WUNDERGROUND_API_KEY"];      
       uri = URI("http://api.wunderground.com/api/#{wunderground_api_key}/conditions/tide/astronomy/q/pws:KCASANFR69.json")
