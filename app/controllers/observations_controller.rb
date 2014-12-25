@@ -14,8 +14,8 @@ class ObservationsController < ApplicationController
     timezone = "Pacific Time (US & Canada)"
     @observation = nil
 
-    @observation = Rails.cache.fetch("current_observation", :expires_in => 10.minutes) do      
-    # @observation = Rails.cache.fetch("current_observation", :expires_in => 1.seconds) do      
+    # @observation = Rails.cache.fetch("current_observation", :expires_in => 10.minutes) do
+    @observation = Rails.cache.fetch("current_observation", :expires_in => 0.seconds) do
       # puts "here getting observation"      
       wunderground_api_key = ENV["WUNDERGROUND_API_KEY"];      
       uri = URI("http://api.wunderground.com/api/#{wunderground_api_key}/conditions/tide/astronomy/q/pws:KCASANFR69.json")
@@ -61,15 +61,16 @@ class ObservationsController < ApplicationController
       end
       
 
-      sun_phase = hash["sun_phase"]
-      sunrise = Time.new(Time.now.year, Time.now.month, Time.now.day, sun_phase["sunrise"]["hour"],sun_phase["sunrise"]["minute"]).in_time_zone(timezone)            
-      sunset = Time.new(Time.now.year, Time.now.month, Time.now.day, sun_phase["sunset"]["hour"],sun_phase["sunset"]["minute"]).in_time_zone(timezone)
-      puts "sunrise: #{sunrise}"       
-      puts "sunset: #{sunset}"       
-      observation.sunrise = sunrise 
-      observation.sunset = sunset            
-      observation.is_park_closed = !(((Time.now <=> sunrise) > -1) && ((Time.now <=> sunset) < 1))
-      
+      # sun_phase = hash["sun_phase"]
+      # sunrise = Time.new(Time.now.year, Time.now.month, Time.now.day, sun_phase["sunrise"]["hour"],sun_phase["sunrise"]["minute"]).in_time_zone(timezone)
+      # sunset = Time.new(Time.now.year, Time.now.month, Time.now.day, sun_phase["sunset"]["hour"],sun_phase["sunset"]["minute"]).in_time_zone(timezone)
+      # puts "sunrise: #{sunrise}"
+      # puts "sunset: #{sunset}"
+      # observation.sunrise = sunrise
+      # observation.sunset = sunset
+      # observation.is_park_closed = !(((Time.now <=> sunrise) > -1) && ((Time.now <=> sunset) < 1))
+      observation.is_park_closed = false
+
       if observation.is_park_closed
         observation.go_funston = -1
       else  

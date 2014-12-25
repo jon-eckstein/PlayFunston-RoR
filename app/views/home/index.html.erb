@@ -9,18 +9,18 @@
 	  <div data-bind="if: !isComplete()">
 	    <h5>Hmmmm..let me see...</h5> 
 	  </div>
-	  <div data-bind="css: { visible: isComplete() }" class="text-center">
-	    <div data-bind="if: !isError()">
-	      <div data-bind="if: goFunston() == 1" >
-	         <h4 class="answer yes">Yes</h4>
-	      </div>
-	      <div data-bind="if: goFunston() == -1" >
-	         <h4 class="answer no">No</h4>
-	      </div>    
-	      <div data-bind="if: goFunston() == 0" >
-	         <h4 class="answer maybe">Maybe</h4>
-	      </div>
-	    </div>
+	  <!--<div data-bind="css: { visible: isComplete() }" class="text-center">-->
+	    <!--<div data-bind="if: !isError()">-->
+	      <!--<div data-bind="if: goFunston() == 1" >-->
+	         <!--<h4 class="answer yes">Yes</h4>-->
+	      <!--</div>-->
+	      <!--<div data-bind="if: goFunston() == -1" >-->
+	         <!--<h4 class="answer no">No</h4>-->
+	      <!--</div>    -->
+	      <!--<div data-bind="if: goFunston() == 0" >-->
+	         <!--<h4 class="answer maybe">Maybe</h4>-->
+	      <!--</div>-->
+	    <!--</div>-->
 	    <div data-bind="if: isError()">
 	      <h3 class="no">Error occured getting weather data. Try again or go to Fort Funston at your own risk.</h3>
 	    </div>
@@ -56,7 +56,7 @@
           </tr>          
         </table>
         <div style="font-size:small" class="text-left">*<span data-bind="text: obsTime()"></span></div>           
-        <div style="margin-top:-10px; font-size:small" class="text-left">*<span data-bind="text: imageUpdatedAt()"></div> 
+        <div style="margin-top:-10px; font-size:small" class="text-left">*<span data-bind="text: imageUpdatedAt()"></span></div>
         <div style="margin-top:-10px; font-size:small" class="text-left">Webcam by <a href="http://www.flyfunston.org">flying feathers hang gliding club</a></div>
         <!--<a data-toggle="modal" href="#myModal" class="btn btn-link btn-xs text-center">Suggest a different answer.</a> -->       
 		</div>
@@ -87,7 +87,8 @@
       </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
   </div><!-- /.modal -->	    
-  </div>     
+  </div>
+  </div>
 </body>
   <script type="text/javascript">
       $(function () {
