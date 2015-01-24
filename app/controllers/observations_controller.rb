@@ -61,15 +61,14 @@ class ObservationsController < ApplicationController
       end
       
 
-      # sun_phase = hash["sun_phase"]
-      # sunrise = Time.new(Time.now.year, Time.now.month, Time.now.day, sun_phase["sunrise"]["hour"],sun_phase["sunrise"]["minute"]).in_time_zone(timezone)
-      # sunset = Time.new(Time.now.year, Time.now.month, Time.now.day, sun_phase["sunset"]["hour"],sun_phase["sunset"]["minute"]).in_time_zone(timezone)
+      sun_phase = hash["sun_phase"]
+      sunrise = Time.new(Time.now.year, Time.now.month, Time.now.day, sun_phase["sunrise"]["hour"],sun_phase["sunrise"]["minute"]).in_time_zone(timezone)
+      sunset = Time.new(Time.now.year, Time.now.month, Time.now.day, sun_phase["sunset"]["hour"],sun_phase["sunset"]["minute"]).in_time_zone(timezone)
       # puts "sunrise: #{sunrise}"
       # puts "sunset: #{sunset}"
-      # observation.sunrise = sunrise
-      # observation.sunset = sunset
-      # observation.is_park_closed = !(((Time.now <=> sunrise) > -1) && ((Time.now <=> sunset) < 1))
-      observation.is_park_closed = false
+      observation.sunrise = sunrise
+      observation.sunset = sunset
+      observation.is_park_closed = !(((Time.now <=> sunrise) > -1) && ((Time.now <=> sunset) < 1))
 
       if observation.is_park_closed
         observation.go_funston = -1
