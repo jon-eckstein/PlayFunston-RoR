@@ -37,6 +37,9 @@ gem 'anjlab-bootstrap-rails', :require => 'bootstrap-rails', :github => 'anjlab/
 
 gem 'rails_12factor', group: :production
 
+gem 'forecast_io'
+gem 'multipart-post'
+gem 'rest-client'
 
 # gem 'mongoid', github: 'mongoid/mongoid'
 

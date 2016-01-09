@@ -5,88 +5,87 @@ require_relative "observed_node"
 
 class SimpleDecisionTree
 	
-	attr_accessor :headNode
+	attr_accessor :head_node
 		
-	def initialize(headNode = TreeNode.new(nil,nil,0))		  
-    @headNode = headNode           
+	def initialize(head_node = TreeNode.new(nil,nil,0))
+    @head_node = head_node
   end 
 	
-	def add_branch(newVals, answer, observed)
-     	nodePointer = @headNode
-     	addNode = false
+	def add_branch(new_vals, answer, observed)
+     	node_pointer = @head_node
+     	add_node = false
      	
      	#cycle through each value and figure out where to put it...
-      newVals.each do |val|
-        childCount = nodePointer.children.length
-        if childCount > 0
+      new_vals.each do |val|
+        if node_pointer.children.length > 0
             #find a node with the same value as the current node...       
-            sameValNode = nodePointer.children.detect { |child| child.value == val  }         
+            same_val_node = node_pointer.children.detect { |child| child.value == val  }
             
-            if !sameValNode.nil?              
+            if same_val_node
               if observed
-                if sameValNode.class == ObservedNode                  
-                  nodePointer = sameValNode
+                if same_val_node.is_a?(ObservedNode)
+                  node_pointer = same_val_node
                 else
-                  newObserved = ObservedNode.new sameValNode.parent, sameValNode.children, val
-                  nodePointer.children.delete sameValNode
-                  nodePointer.children.add newObserved
-                  nodePointer = newObserved 
+                  new_observed = ObservedNode.new same_val_node.parent, same_val_node.children, val
+                  node_pointer.children.delete same_val_node
+                  node_pointer.children.add new_observed
+                  node_pointer = new_observed
                 end
-              else                
-                nodePointer = sameValNode                 
+              else
+                node_pointer = same_val_node
               end
             else
-              addNode = true
+              add_node = true
             end                         
         else
-          addNode = true
+          add_node = true
         end    
            
-       if addNode
+       if add_node
          if observed
-           newChild = ObservedNode.new nodePointer,nil,val
+           new_child = ObservedNode.new(node_pointer, nil, val)
          else
-           newChild = TrainedNode.new nodePointer,nil,val
+           new_child = TrainedNode.new(node_pointer, nil, val)
          end
-         
-         nodePointer.children << newChild
-         nodePointer = newChild
+
+         node_pointer.children << new_child
+         node_pointer = new_child
        end                                         
       
         
       end #end loop	
-     	
-     	 
-      nodePointer.children=nodePointer.children.clear
+
+
+      node_pointer.children=node_pointer.children.clear
       
-      if (observed)
-          nodePointer.children << ObservedNode.new(nodePointer, nil, answer)
+      if observed
+        node_pointer.children << ObservedNode.new(node_pointer, nil, answer)
       else
-          nodePointer.children << TrainedNode.new(nodePointer, nil, answer)
+        node_pointer.children << TrainedNode.new(node_pointer, nil, answer)
       end
            	     
 	end #end class
 	
-	def compute(inputVals)
+	def compute(input_vals)
 	  #start with the head node and work down the tree comparing each value
-    nodePointer = @headNode
-    
-    inputVals.each do |inputVal|
+    node_pointer = @head_node
+
+    input_vals.each do |input_val|
       #get the closest node by value...           
-      mappedNodes = nodePointer.children.map do |child|        
+      mapped_nodes = node_pointer.children.map do |child|
             # :node=>child, :diff=>(child.value - inputVal).abs, :observed=>child.class == ObservedNode }
-            [child, (child.value - inputVal).abs, (child.class == ObservedNode) ? 1 : 0] 
-      end.sort_by{ |a| [a[1],!a[2]] } 
-                                        
-      nodePointer = mappedNodes.first[0]
+            [child, (child.value - input_val).abs, child.is_a?(ObservedNode) ? 1 : 0]
+      end.sort_by{ |a| [a[1],!a[2]] }
+
+      node_pointer = mapped_nodes.first[0]
       
-      puts nodePointer.value
+      puts node_pointer.value
       
     end
     
-    raise "bad tree" unless nodePointer.children.length == 1  
+    raise "bad tree" unless node_pointer.children.length == 1
              
-    return nodePointer.children.first.value  	  
+    return node_pointer.children.first.value
 	end
 			
 end

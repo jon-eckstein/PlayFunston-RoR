@@ -18,3 +18,6 @@
 app/assets/images/current_observation_large.jpg
 
 app/assets/images/current_observation_large_foggy.jpg
+
+#ignore the env_vars
+config/initializers/env_vars.rb

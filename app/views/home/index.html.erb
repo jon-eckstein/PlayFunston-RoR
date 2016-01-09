@@ -9,18 +9,18 @@
 	  <div data-bind="if: !isComplete()">
 	    <h5>Hmmmm..let me see...</h5> 
 	  </div>
-	  <!--<div data-bind="css: { visible: isComplete() }" class="text-center">-->
-	    <!--<div data-bind="if: !isError()">-->
-	      <!--<div data-bind="if: goFunston() == 1" >-->
-	         <!--<h4 class="answer yes">Yes</h4>-->
-	      <!--</div>-->
-	      <!--<div data-bind="if: goFunston() == -1" >-->
-	         <!--<h4 class="answer no">No</h4>-->
-	      <!--</div>    -->
-	      <!--<div data-bind="if: goFunston() == 0" >-->
-	         <!--<h4 class="answer maybe">Maybe</h4>-->
-	      <!--</div>-->
-	    <!--</div>-->
+	  <div data-bind="css: { visible: isComplete() }" class="text-center">
+	    <div data-bind="if: !isError()">
+	      <div data-bind="if: goFunston() == 1" >
+	         <h4 class="answer yes">Yes</h4>
+	      </div>
+	      <div data-bind="if: goFunston() == -1" >
+	         <h4 class="answer no">No</h4>
+	      </div>
+	      <div data-bind="if: goFunston() == 0" >
+	         <h4 class="answer maybe">Maybe</h4>
+	      </div>
+	    </div>
 	    <div data-bind="if: isError()">
 	      <h3 class="no">Error occured getting weather data. Try again or go to Fort Funston at your own risk.</h3>
 	    </div>
