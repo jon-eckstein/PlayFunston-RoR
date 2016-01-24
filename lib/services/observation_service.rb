@@ -6,7 +6,7 @@ class ObservationService
 
 
       observation = Observation.new
-      if(current_obs = wu_observation['current_observation'])
+      if (current_obs = wu_observation['current_observation'])
         weather_updated_desc = current_obs['observation_time'].gsub! 'Last Updated on', 'Weather last updated on'
         observation.obs_date_desc = weather_updated_desc[0..-4] #clear the timezone..lazy way
         observation.condition = current_obs['weather']
@@ -18,28 +18,28 @@ class ObservationService
 
 
       #get the tide data...
-      if(tide_summary = wu_observation['tide']['tideSummary'])
+      if (tide_summary = wu_observation['tide']['tideSummary'])
         if tide_summary.count > 0
           next_low_tide = get_next_low_tide(tide_summary)
           if next_low_tide
             observation.next_low_tide = next_low_tide.in_time_zone(timezone).to_s
             observation.hours_until_next_lowtide = (next_low_tide.to_time - Time.now.to_datetime) / 1.hour
-            observation.hours_until_next_low_tide_desc = distance_of_time_in_words(next_low_tide,Time.now.to_datetime)
+            observation.hours_until_next_low_tide_desc = distance_of_time_in_words(next_low_tide, Time.now.to_datetime)
           end
 
           next_high_tide = get_next_high_tide(tide_summary)
           if next_high_tide
             observation.next_high_tide = next_high_tide.in_time_zone(timezone).to_s
             observation.hours_until_next_high_tide = (next_high_tide.to_time - Time.now.to_datetime) / 1.hour
-            observation.hours_until_next_high_tide_desc = distance_of_time_in_words(next_high_tide,Time.now.to_datetime)
+            observation.hours_until_next_high_tide_desc = distance_of_time_in_words(next_high_tide, Time.now.to_datetime)
           end
         end
       end
 
       # get sun_phase data
-      if(sun_phase = wu_observation['sun_phase'])
-        sunrise = Time.new(Time.now.year, Time.now.month, Time.now.day, sun_phase['sunrise']['hour'],sun_phase['sunrise']['minute']).in_time_zone(timezone)
-        sunset = Time.new(Time.now.year, Time.now.month, Time.now.day, sun_phase['sunset']['hour'],sun_phase['sunset']['minute']).in_time_zone(timezone)
+      if (sun_phase = wu_observation['sun_phase'])
+        sunrise = Time.new(Time.now.year, Time.now.month, Time.now.day, sun_phase['sunrise']['hour'], sun_phase['sunrise']['minute']).in_time_zone(timezone)
+        sunset = Time.new(Time.now.year, Time.now.month, Time.now.day, sun_phase['sunset']['hour'], sun_phase['sunset']['minute']).in_time_zone(timezone)
         observation.sunrise = sunrise
         observation.sunset = sunset
         observation.is_park_closed = !(((Time.now <=> sunrise) > -1) && ((Time.now <=> sunset) < 1))

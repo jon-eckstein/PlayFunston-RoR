@@ -1,263 +1,278 @@
+<div class="container hero-unit pull-left" style="margin-left:20px; width:400px; padding:25px">
+  <h5><strong>Should I take my dog to Fort Funston right now?</strong></h5>
 
-
-<p id="notice"><%= notice %></p>
-
-</head>
-<body >  
-  <div class="container hero-unit pull-left" style="margin-left:20px; width:400px; padding:25px" >       
-  	<h5 ><strong>Should I take my dog to Fort Funston right now?</strong></h5>    	
-	  <div data-bind="if: !isComplete()">
-	    <h5>Hmmmm..let me see...</h5> 
-	  </div>
-	  <div data-bind="css: { visible: isComplete() }" class="text-center">
-	    <div data-bind="if: !isError()">
-	      <div data-bind="if: goFunston() == 1" >
-	         <h4 class="answer yes">Yes</h4>
-	      </div>
-	      <div data-bind="if: goFunston() == -1" >
-	         <h4 class="answer no">No</h4>
-	      </div>
-	      <div data-bind="if: goFunston() == 0" >
-	         <h4 class="answer maybe">Maybe</h4>
-	      </div>
-	    </div>
-	    <div data-bind="if: isError()">
-	      <h3 class="no">Error occured getting weather data. Try again or go to Fort Funston at your own risk.</h3>
-	    </div>
-      <div data-bind="if: isParkClosed()">
-        <h2 class="no">Park is Closed</h2>
+  <div data-bind="if: !isComplete()">
+    <h5>Hmmmm..let me see...</h5>
+  </div>
+  <div data-bind="css: { visible: isComplete() }" class="text-center">
+    <div data-bind="if: !isError()">
+      <div data-bind="if: goFunston() == 1">
+        <h4 class="answer yes">Yes</h4>
       </div>
-	    <div data-bind="if: showConditions()" style="margin-top:25px;font-size:15px">
-        <table class="table">
-          <tr>
-            <th>Conditions</th>
-            <td data-bind="text: condition()" class="text-left"></td>
-            <td>
-              <span data-bind="css: conditionCodeCss" class="glyphicon"></span>
-            </td>
-          </tr>          
-          <tr>
-            <th>Wind</th>
-            <td data-bind="text: windText()" class="text-left"></td>
-            <td><span data-bind="css: windCss" class="glyphicon"></span>
-            </td>
-          </tr>          
-          <tr>
-            <th>Temp</th>
-            <td data-bind="text: tempText()" class="text-left"></td>
-            <td><span data-bind="css: tempCss"  class="glyphicon"></span>
-            </td>
-          </tr>          
-          <tr>
-            <th>Tide</th>
-            <td data-bind="html: tideText()" class="text-left"></td>
-            <td><span data-bind="css: tideCss" class="glyphicon"></span>
-            </td>
-          </tr>          
-        </table>
-        <div style="font-size:small" class="text-left">*<span data-bind="text: obsTime()"></span></div>           
-        <div style="margin-top:-10px; font-size:small" class="text-left">*<span data-bind="text: imageUpdatedAt()"></span></div>
-        <div style="margin-top:-10px; font-size:small" class="text-left">Webcam by <a href="http://www.flyfunston.org">flying feathers hang gliding club</a></div>
-        <!--<a data-toggle="modal" href="#myModal" class="btn btn-link btn-xs text-center">Suggest a different answer.</a> -->       
-		</div>
-    
+      <div data-bind="if: goFunston() == -1">
+        <h4 class="answer no">No</h4>
+      </div>
+      <div data-bind="if: goFunston() == 0">
+        <h4 class="answer maybe">Maybe</h4>
+      </div>
+    </div>
+    <div data-bind="if: isError()">
+      <h3 class="no">Error occured getting weather data. Try again or go to Fort Funston at your own risk.</h3>
+    </div>
+    <div data-bind="if: isParkClosed()">
+      <h2 class="no">Park is Closed</h2>
+    </div>
+    <div data-bind="if: showConditions()" style="margin-top:25px;font-size:15px">
+      <table class="table">
+        <tr>
+          <th>Conditions</th>
+          <td data-bind="text: condition()" class="text-left"></td>
+          <td>
+            <span data-bind="css: conditionCodeCss" class="glyphicon"></span>
+          </td>
+        </tr>
+        <tr>
+          <th>Wind</th>
+          <td data-bind="text: windText()" class="text-left"></td>
+          <td><span data-bind="css: windCss" class="glyphicon"></span>
+          </td>
+        </tr>
+        <tr>
+          <th>Temp</th>
+          <td data-bind="text: tempText()" class="text-left"></td>
+          <td><span data-bind="css: tempCss" class="glyphicon"></span>
+          </td>
+        </tr>
+        <tr>
+          <th>Tide</th>
+          <td data-bind="html: tideText()" class="text-left"></td>
+          <td><span data-bind="css: tideCss" class="glyphicon"></span>
+          </td>
+        </tr>
+      </table>
+      <div style="font-size:small" class="text-left">*<span data-bind="text: obsTime()"></span></div>
+      <div style="margin-top:-10px; font-size:small" class="text-left">*<span data-bind="text: imageUpdatedAt()"></span>
+      </div>
+      <div style="margin-top:-10px; font-size:small" class="text-left">Webcam by
+        <a href="http://www.flyfunston.org">flying feathers hang gliding club</a></div>
+      <!--<a data-toggle="modal" href="#myModal" class="btn btn-link btn-xs text-center">Suggest a different answer.</a> -->
+    </div>
+
     <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>          
-          <h4 class="modal-title">In order to make the best decision,&#13;&#10;this site learns from your suggestions.&#13;&#10;Please contribute!</h4>
-        </div>
-        <div class="modal-body">
-          <p>Would you take your dog to Fort Funston under these conditions?</p>
-          <div id="buttonSet" style="margin-top:-10px; margin-left:-4px">
-              <button data-bind="click: function() { submitAnswer(1) }" class="btn btn-default btn-xs yes" >Yes</button>  
-              <button data-bind="click: function() { submitAnswer(0) }" class="btn btn-default btn-xs maybe">Maybe</button>  
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <h4 class="modal-title">In order to make the best decision,&#13;&#10;this site learns from your suggestions.&#13;&#10;Please
+              contribute!</h4>
+          </div>
+          <div class="modal-body">
+            <p>Would you take your dog to Fort Funston under these conditions?</p>
+
+            <div id="buttonSet" style="margin-top:-10px; margin-left:-4px">
+              <button data-bind="click: function() { submitAnswer(1) }" class="btn btn-default btn-xs yes">Yes</button>
+              <button data-bind="click: function() { submitAnswer(0) }" class="btn btn-default btn-xs maybe">Maybe</button>
               <button data-bind="click: function() { submitAnswer(-1) }" class="btn btn-default btn-xs no">No</button>
-          </div>
-          <div id="thanks" class="yes" >
+            </div>
+            <div id="thanks" class="yes">
               Thanks!
-          </div>
-          <div id="problem" class="no">
+            </div>
+            <div id="problem" class="no">
               There was a problem submitting the data. Please try again later.
-          </div>          
-          <div id="submitResult">
+            </div>
+            <div id="submitResult">
+            </div>
           </div>
-        </div>        
-      </div><!-- /.modal-content -->
-    </div><!-- /.modal-dialog -->
-  </div><!-- /.modal -->	    
+        </div>
+        <!-- /.modal-content -->
+      </div>
+      <!-- /.modal-dialog -->
+    </div>
+    <!-- /.modal -->
   </div>
-  </div>
-</body>
-  <script type="text/javascript">
-      $(function () {
+</div>
 
-          yesCss = 'glyphicon-ok-circle yes';
-          maybeCss = 'glyphicon-minus-sign maybe';
-          noCss = 'glyphicon-remove-circle no';
+<script type="text/javascript">
+    $(function () {
 
-          $('#thanks').hide();
-          $('#problem').hide(); 		  		      
+        yesCss = 'glyphicon-ok-circle yes';
+        maybeCss = 'glyphicon-minus-sign maybe';
+        noCss = 'glyphicon-remove-circle no';
 
-          var viewModel = {
-              self: this,
-              isComplete: ko.observable(false),
-              isError: ko.observable(false),
-              obsTime: ko.observable(''),
-              condition: ko.observable(''),
-              conditionCode: ko.observable(0),
-              temp: ko.observable(0),
-              windChill: ko.observable(0),
-              windMph: ko.observable(0),
-              windGustMph: ko.observable(0),
-              goFunston: ko.observable(5),
-              windText: ko.observable(''),
-              tempText: ko.observable(''),
-              tideHours: ko.observable(0),
-              tideText: ko.observable(''),
-              imageUpdatedAt : ko.observable(''),
-              isParkClosed : ko.observable(false),
-              serverResult: null,
+        $('#thanks').hide();
+        $('#problem').hide();
 
-              submitAnswer: function (val) {
-                  this.serverResult.go_funston = val;
-                  this.serverResult.observed = true;
-                  $.post("/observations", this.serverResult)
-                    .success(function (jqxhr) { $("#thanks").show(); })
-                    .error(function () { $("#problem").show(); })
-                    .complete(function () { $("#buttonSet").hide(); });
+        var viewModel = {
+            self: this,
+            isComplete: ko.observable(false),
+            isError: ko.observable(false),
+            obsTime: ko.observable(''),
+            condition: ko.observable(''),
+            conditionCode: ko.observable(0),
+            temp: ko.observable(0),
+            windChill: ko.observable(0),
+            windMph: ko.observable(0),
+            windGustMph: ko.observable(0),
+            goFunston: ko.observable(5),
+            windText: ko.observable(''),
+            tempText: ko.observable(''),
+            tideHours: ko.observable(0),
+            tideText: ko.observable(''),
+            imageUpdatedAt: ko.observable(''),
+            isParkClosed: ko.observable(false),
+            serverResult: null,
 
-              },
+            submitAnswer: function (val) {
+                this.serverResult.go_funston = val;
+                this.serverResult.observed = true;
+                $.post("/observations", this.serverResult)
+                        .success(function (jqxhr) {
+                            $("#thanks").show();
+                        })
+                        .error(function () {
+                            $("#problem").show();
+                        })
+                        .complete(function () {
+                            $("#buttonSet").hide();
+                        });
 
-              submitResultText: ko.observable('')
-              
-          };
-                             
-          // console.log(viewModel);
-          window.viewModel = viewModel;
+            },
 
-          $.ajax({
-              url: '/observations/new',
-              dataType: 'json',
-              cache: false,
-              type: 'GET',
-              success: function (result) {
-                  console.log(result);
-                  viewModel.serverResult = result;
-                  viewModel.obsTime(result.obs_date_desc);
-                  viewModel.condition(result.condition);
-                  viewModel.conditionCode(result.condition_code)
-                  viewModel.temp(result.temp);
-                  viewModel.windChill(result.wind_chill);
-                  viewModel.windMph(result.wind_mph);
-                  viewModel.windGustMph(result.wind_gust_mph);                                    
-                  viewModel.goFunston(result.go_funston);
-                  viewModel.imageUpdatedAt(result.image_updated_at);
-                  viewModel.isParkClosed(result.is_park_closed);
+            submitResultText: ko.observable('')
 
-                  if (result.go_funston == -5) {
-                      viewModel.isError(true);
-                  }
+        };
 
-                  if (result.wind_gust_mph > 0) {
-                      viewModel.windText(result.wind_mph + ' MPH gusting to ' + result.wind_gust_mph + ' MPH')
-                  } else {
-                      viewModel.windText(result.wind_mph + ' MPH');
-                  }
+        // console.log(viewModel);
+        window.viewModel = viewModel;
 
-                  if (result.wind_chill > 0) {
-                      viewModel.tempText(result.temp + 'F (feels like ' + result.wind_chill + 'F with wind chill)');
-                  } else {
-                      viewModel.tempText(result.temp + 'F');
-                  }
+        $.ajax({
+            url: '/observations/new',
+            dataType: 'json',
+            cache: false,
+            type: 'GET',
+            success: function (result) {
+                console.log(result);
+                viewModel.serverResult = result;
+                viewModel.obsTime(result.obs_date_desc);
+                viewModel.condition(result.condition);
+                viewModel.conditionCode(result.condition_code)
+                viewModel.temp(result.temp);
+                viewModel.windChill(result.wind_chill);
+                viewModel.windMph(result.wind_mph);
+                viewModel.windGustMph(result.wind_gust_mph);
+                viewModel.goFunston(result.go_funston);
+                viewModel.imageUpdatedAt(result.image_updated_at);
+                viewModel.isParkClosed(result.is_park_closed);
 
-                  if (result.hours_until_next_high_tide > -1 && result.hours_until_next_lowtide > -1) {
-                      viewModel.tideHours(result.hours_until_next_high_tide);
-                      if(result.hours_until_next_high_tide)
+                if (result.go_funston == -5) {
+                    viewModel.isError(true);
+                }
+
+                if (result.wind_gust_mph > 0) {
+                    viewModel.windText(result.wind_mph + ' MPH gusting to ' + result.wind_gust_mph + ' MPH')
+                } else {
+                    viewModel.windText(result.wind_mph + ' MPH');
+                }
+
+                if (result.wind_chill > 0) {
+                    viewModel.tempText(result.temp + 'F (feels like ' + result.wind_chill + 'F with wind chill)');
+                } else {
+                    viewModel.tempText(result.temp + 'F');
+                }
+
+                if (result.hours_until_next_high_tide > -1 && result.hours_until_next_lowtide > -1) {
+                    viewModel.tideHours(result.hours_until_next_high_tide);
+                    if (result.hours_until_next_high_tide)
                         viewModel.tideText('Next low: ' + result.hours_until_next_low_tide_desc + " <br> Next high: " + result.hours_until_next_high_tide_desc);
-                  } else {
-                      viewModel.tideHours(0);
-                      viewModel.tideText('No tide data available.');
-                  }
+                } else {
+                    viewModel.tideHours(0);
+                    viewModel.tideText('No tide data available.');
+                }
 
 
-              },
-              error: function (result) {
-                  viewModel.isError(true);
-              },
-              complete: function () {
-                  $.backstretch("/observations/image", {fade: 1000});
-                  viewModel.isComplete(true);
-              }
-          });
-          
-          viewModel.conditionCodeCss = ko.computed(function() {  
-                                                  
-                                                  if (this.conditionCode() == 1){
-                                                    return yesCss;                                                      
-                                                  }  
-                                                  if(this.conditionCode() == <%=  Playfunston::THRESHOLD_CONDITION_CODE_MAYBE %>){
-                                                    return maybeCss;
-                                                  }  
-                                                  if(this.conditionCode() < <%= Playfunston::THRESHOLD_CONDITION_CODE_MAYBE %>){
-                                                    return noCss;
-                                                  }
-                                                  
-                                              }, viewModel);
+            },
+            error: function (result) {
+                viewModel.isError(true);
+            },
+            complete: function () {
+                $.backstretch("/observations/image", {fade: 1000});
+                viewModel.isComplete(true);
+            }
+        });
 
-          viewModel.windCss = ko.computed(function() {  
-                                                  
-                                                   if(this.windMph() <= <%=Playfunston::THRESHOLD_WIND_MPH_MAYBE_HIGH  %> && this.windMph() > <%=Playfunston::THRESHOLD_WIND_MPH_MAYBE_LOW %>){
-                                                      return maybeCss;
-                                                   }
-                                                   if(this.windMph() > <%= Playfunston::THRESHOLD_WIND_MPH_NO  %>){
-                                                      return noCss;
-                                                   }
+        viewModel.conditionCodeCss = ko.computed(function () {
 
-                                                   return yesCss;
-                                                
-                                              }, viewModel);
+            if (this.conditionCode() == 1) {
+                return yesCss;
+            }
+            if (this.conditionCode() == <%=  Playfunston::THRESHOLD_CONDITION_CODE_MAYBE %>) {
+                return maybeCss;
+            }
+            if (this.conditionCode() < <%= Playfunston::THRESHOLD_CONDITION_CODE_MAYBE %>) {
+                return noCss;
+            }
 
-          viewModel.tempCss = ko.computed(function() {  
-                                                  
-                                                   if(this.temp() > <%=Playfunston::THRESHOLD_TEMP_MAYBE_LOW  %> && this.temp() < <%=Playfunston::THRESHOLD_TEMP_MAYBE_HIGH  %>){
-                                                      return maybeCss;
-                                                   } 
-                                                   if(this.temp() < <%=Playfunston::THRESHOLD_TEMP_NO  %> ){
-                                                    return noCss;
-                                                   }
-                                                   return yesCss;
-                                                
-                                              }, viewModel);
+        }, viewModel);
 
-          viewModel.tideCss = ko.computed(function() {  
-                                                  
-                                                   if(this.tideHours() >= <%=Playfunston::THRESHOLD_TIDE_MAYBE_HIGH  %> || this.tideHours() <= <%=Playfunston::THRESHOLD_TIDE_MAYBE_LOW  %>){
-                                                    return maybeCss;
-                                                   }
-                                                   
-                                                   return yesCss;
-                                                
-                                              }, viewModel);
+        viewModel.windCss = ko.computed(function () {
 
-          viewModel.showConditions = ko.computed(function() {
+            if (this.windMph() <= <%=Playfunston::THRESHOLD_WIND_MPH_MAYBE_HIGH  %> && this.windMph() > <%=Playfunston::THRESHOLD_WIND_MPH_MAYBE_LOW %>) {
+                return maybeCss;
+            }
+            if (this.windMph() > <%= Playfunston::THRESHOLD_WIND_MPH_NO  %>) {
+                return noCss;
+            }
+
+            return yesCss;
+
+        }, viewModel);
+
+        viewModel.tempCss = ko.computed(function () {
+
+            if (this.temp() > <%=Playfunston::THRESHOLD_TEMP_MAYBE_LOW  %> && this.temp() < <%=Playfunston::THRESHOLD_TEMP_MAYBE_HIGH  %>) {
+                return maybeCss;
+            }
+            if (this.temp() < <%=Playfunston::THRESHOLD_TEMP_NO  %>) {
+                return noCss;
+            }
+            return yesCss;
+
+        }, viewModel);
+
+        viewModel.tideCss = ko.computed(function () {
+
+            if (this.tideHours() >= <%=Playfunston::THRESHOLD_TIDE_MAYBE_HIGH  %> || this.tideHours() <= <%=Playfunston::THRESHOLD_TIDE_MAYBE_LOW  %>) {
+                return maybeCss;
+            }
+
+            return yesCss;
+
+        }, viewModel);
+
+        viewModel.showConditions = ko.computed(function () {
             // return this.isComplete();
             return this.isComplete() && !this.isParkClosed() && !this.isError();
-          }, viewModel);
+        }, viewModel);
 
 
-          ko.applyBindings(viewModel);          
+        ko.applyBindings(viewModel);
 
-      });
+    });
 
 
-        (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-        })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+    (function (i, s, o, g, r, a, m) {
+        i['GoogleAnalyticsObject'] = r;
+        i[r] = i[r] || function () {
+            (i[r].q = i[r].q || []).push(arguments)
+        }, i[r].l = 1 * new Date();
+        a = s.createElement(o),
+                m = s.getElementsByTagName(o)[0];
+        a.async = 1;
+        a.src = g;
+        m.parentNode.insertBefore(a, m)
+    })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
 
-          ga('create', 'UA-45584745-1', 'playfunston.com');
-          ga('send', 'pageview');
-      
-   </script>
+    ga('create', 'UA-45584745-1', 'playfunston.com');
+    ga('send', 'pageview');
+
+</script>
